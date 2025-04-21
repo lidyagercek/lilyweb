@@ -1,0 +1,33 @@
+{
+    "design": {
+      "responsive": true,
+      "themeColor": "purple",
+      "aesthetic": "modern",
+      "animationLibrary": "framer-motion",
+      "componentLibrary": "shadcn/ui",
+      "visualStyle": "smooth",
+      "fontFamily": "'Comic Sans MS', cursive, sans-serif",
+      "layoutSpacing": "comfortable"
+    },
+    "code": {
+      "framework": "react",
+      "styling": "tailwindcss",
+      "structure": "clean",
+      "useTypescript": true,
+      "components": "modular",
+      "pages": "atomic",
+      "assetsLocation": "public/images",
+      "apiIntegration": false
+    },
+    "behavior": {
+      "pageTransitions": true,
+      "hoverEffects": true,
+      "motionPreferenceRespect": true,
+      "animations": {
+        "fadeIn": true,
+        "slideIn": true,
+        "staggerChildren": true
+      }
+    }
+  }
+  

@@ -1,0 +1,30 @@
+{
+    "project": "Art Portfolio",
+
+    "purpose": "To present my art in a fake desktop environment inspired by retro games.",
+
+    "audience": "Potential clients, collaborators, and studios",
+
+    "goals": [
+    "Create a fun, retro-styled interactive art portfolio",
+    "Emulate old OS interfaces with glowing purple aesthetics",
+    "Keep codebase modular, organized, and scalable",
+    "Represent main categories as desktop folders",
+    "Use top menu bars inside windows for subcategory navigation"
+  ],
+
+   "technologies": [
+    "React",
+    "TailwindCSS",
+    "Framer Motion",
+    "shadcn/ui",
+    "Comic Sans or pixel font"
+  ],
+  
+  "folderStructure": {
+    "public/images": "Organized by mainCategory/subCategory/images",
+    "src/components": "UI elements like windows, icons, tabs, galleries",
+    "src/data/artworks.ts": "List of artworks and categories to map UI",
+    "src/pages": "Page components like index, about, etc."
+  }
+}
