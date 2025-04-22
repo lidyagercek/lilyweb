@@ -275,13 +275,13 @@ export function RetroWindow({
       {/* Title Bar - Made draggable */}
       <div 
         className={cn(
-          "flex items-center justify-between px-2 pb-1.5 pt-0 text-[#6D6DD0] bg-[#000000] text-sm font-bold border-b-4 border-[#6D6DD0]",
+          "flex items-center justify-between px-2 py-1.5 text-[#6D6DD0] bg-[#000000] text-sm font-bold border-b-4 border-[#6D6DD0]",
           !isMaximized && (isDragging ? "cursor-grabbing" : "cursor-grab")
         )}
         onMouseDown={handleTitleMouseDown}
       >
         <div className="flex items-center">
-          <span className="ml-1 font-minecraft flex items-center leading-none -mt-1">{title}</span>
+          <span className="ml-1 font-minecraft flex items-center leading-none ">{title}</span>
         </div>
         <div className="flex gap-1">
           <button 
@@ -319,7 +319,7 @@ export function RetroWindow({
               key={category}
               onClick={() => setActiveCategory(category)}
               className={cn(
-                "px-2 py-1 text-xs mr-1 text-[#6D6DD0] font-minecraft flex items-center leading-none -mt-1",
+                "px-2 py-1 text-xs mr-1 text-[#6D6DD0] font-minecraft flex items-center leading-none ",
                 activeCategory === category && "bg-[#000000] border-t-1 border-l-1 border-[#6D6DD0] border-r-1 border-b-1 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#6D6DD0,inset_2px_2px_0_#6D6DD0]"
               )}
             >

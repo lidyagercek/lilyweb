@@ -175,7 +175,7 @@ export default function App() {
       <div className="flex-1 relative">
         {/* Desktop Icons */}
         <div className="w-64 ml-8">
-          <div className="flex flex-col flex-wrap h-[740px] gap-7 mt-8 z-0">
+          <div className="flex flex-col flex-wrap h-[740px] gap-7 mt-5 z-0">
             <FolderIcon 
               label="About Me" 
               selected={activeWindow === "about-me"}
@@ -322,7 +322,7 @@ export default function App() {
         >
           <div className="bg-[#000000] text-[#6D6DD0] p-2 flex items-center h-10 border-1 border-[#6D6DD0]">
             <span className="font-bold rotate-[270deg] text-lg mr-2">▼</span>
-            <span className="font-bold text-sm font-minecraft flex items-center leading-none pt-2 -mt-4 relative top-4">Art Portfolio</span>
+            <span className="font-bold text-sm font-minecraft flex items-center leading-none pt-2 -mt-10 relative top-4">Art Portfolio</span>
           </div>
           <div className="border-t-4 border-[#6D6DD0] mt-1 pt-1">
             {["About Me", "2D Arts", "3D Works", "Pixel Arts", "Animations", "Tattoos"].map((name, index) => (
@@ -337,7 +337,7 @@ export default function App() {
                 }}
               >
                 <div className="w-5 h-5 mr-2 bg-[#252547] border-2 border-[#6D6DD0]"></div>
-                <span className="flex items-center leading-none pt-2 -mt-4 relative top-4">{name}</span>
+                <span className="flex items-center leading-none pt-2">{name}</span>
               </button>
             ))}
           </div>

@@ -5,7 +5,7 @@
 /* Minecraft Font Definition */
 @font-face {
   font-family: 'Minecraftia';
-  src: url('/Minecraftia-Regular.ttf') format('truetype');
+  src: url('/ChonkyPixels.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -14,7 +14,7 @@
 /* Windows 95 Font Face Definitions */
 @font-face {
   font-family: 'MS Sans Serif';
-  src: url('/fonts/ms-sans-serif.woff2') format('woff2');
+  src: url('/ChonkyPixels.ttf') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -22,7 +22,7 @@
 
 @font-face {
   font-family: 'Pixelated MS Sans Serif';
-  src: url('/fonts/ms-sans-serif-pixel.woff2') format('woff2');
+  src: url('/ChonkyPixels.ttf') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

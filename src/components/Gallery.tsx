@@ -158,13 +158,13 @@ export function Gallery({ category, subcategory }: GalleryProps) {
                         target.parentElement!.innerHTML = `
                           <div class="h-full w-full flex items-center justify-center bg-[#000000]"
                                style="background-color: #000000;">
-                            <p class="text-xs text-center font-bold p-2 text-[#6D6DD0]">${displayName}</p>
+                            <p class="text-xs text-center p-2 text-[#6D6DD0]">${displayName}</p>
                           </div>
                         `;
                       }}
                     />
                   </div>
-                  <div className="text-center text-xs mt-1 max-w-[200px] px-1 truncate font-bold text-[#6D6DD0]">
+                  <div className="text-center text-xs mt-1 max-w-[200px] px-1 truncate text-[#6D6DD0]">
                     {displayName}
                   </div>
                 </div>
@@ -174,7 +174,7 @@ export function Gallery({ category, subcategory }: GalleryProps) {
 
           {/* Status bar - simplified */}
           <div className="flex items-center px-2 py-1 text-xs border-t-4 border-[#6D6DD0] bg-[#000000] text-[#6D6DD0]">
-            <div className="px-1 font-bold">
+            <div className="px-1">
               {images.length} item{images.length !== 1 ? 's' : ''}
             </div>
             {selectedImage && (

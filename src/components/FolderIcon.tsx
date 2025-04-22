@@ -57,7 +57,7 @@ export function FolderIcon({
 
       {/* Label */}
       <span className={cn(
-        "text-sm font-bold text-center max-w-24 px-1.5 py-1 -mt-1 truncate font-minecraft flex items-center justify-center leading-tight", 
+        "text-sm text-center max-w-24 px-1.5 py-1 -mt-3 truncate font-minecraft flex items-center justify-center leading-tight", 
         selected ? "bg-[#6D6DD0] text-[#000000]" : "text-[#6D6DD0]"
       )}>
         {label}

@@ -65,9 +65,8 @@ export function TaskBar({
           />
           <div className="flex items-center h-full">
             <div className="px-2 font-bold text-[#6D6DD0] bg-[#000000] border-t-1 border-l-1 border-r-1 border-[#6D6DD0] rounded-t-sm h-full flex items-center">
-              <span className="font-minecraft flex items-center leading-none -mt-1">START</span>
+              <span className="font-minecraft flex items-center leading-none mt-0.5">START</span>
             </div>
-            <div className="w-px h-8 mx-1 bg-[#6D6DD0] shadow-[1px_0_0_#6D6DD0]"></div>
           </div>
         </button>
       )}
@@ -83,15 +82,15 @@ export function TaskBar({
             className={cn(
               "h-8 px-2 flex-shrink-0 min-w-24 max-w-40 flex items-center justify-center text-sm truncate text-[#6D6DD0]",
               minimizedWindows.includes(windowId)
-                ? "border-2 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#000000,inset_2px_2px_0_#6D6DD0] opacity-70 bg-[#000000]" 
+                ? "border-2 border-[#6D6DD0] shadow-[opacity-70 bg-[#000000]" 
                 : currentWindow === windowId 
-                  ? "border-2 border-[#6D6DD0] shadow-[inset_2px_2px_0_#6D6DD0] bg-[#000000]" 
-                  : "border-2 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#000000,inset_2px_2px_0_#6D6DD0] bg-[#000000]"
+                  ? "border-2 border-[#6D6DD0] shadow-[bg-[#000000]" 
+                  : "border-2 border-[#6D6DD0] shadow-[bg-[#000000]"
             )}
             onClick={() => onWindowSelect(windowId)}
           >
             <div className="w-4 h-4 mr-2 bg-[#252547] border-2 border-[#6D6DD0]"></div>
-            <span className="truncate font-minecraft flex items-center leading-none -mt-1">{getWindowName(windowId)}</span>
+            <span className="truncate font-minecraft flex items-center leading-none mt-0.5">{getWindowName(windowId)}</span>
           </button>
         ))}
       </div>
