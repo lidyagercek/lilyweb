@@ -145,11 +145,12 @@ export function Gallery({ category, subcategory }: GalleryProps) {
                     setViewingImage(image);
                   }}
                 >
-                  <div className="border-[6px] border-[#6D6DD0] flex items-center justify-center overflow-hidden p-1 min-h-[100px] min-w-[100px] max-w-[200px] bg-[#000000]">
+                  <div className="border-[2.5px] border-[#6D6DD0] flex items-center justify-center overflow-hidden p-1 min-h-[100px] min-w-[100px] max-w-[200px] bg-[#000000]">
                     <img 
                       src={imageUrl}
                       alt={displayName}
-                      className="max-h-[120px] w-auto object-contain"
+                      className="max-h-[120px] w-auto object-contain select-none pointer-events-none"
+                      draggable="false"
                       onError={(e) => {
                         // If image fails to load, show filename instead
                         const target = e.target as HTMLImageElement;
@@ -209,7 +210,8 @@ export function Gallery({ category, subcategory }: GalleryProps) {
                       : `${category}/${viewingImage}`
                     )}
                     alt={formatImageName(viewingImage)}
-                    className="max-w-full max-h-[70vh] object-contain"
+                    className="max-w-full max-h-[70vh] object-contain select-none pointer-events-none"
+                    draggable="false"
                     onError={(e) => {
                       // If image fails to load, show a placeholder
                       const target = e.target as HTMLImageElement;

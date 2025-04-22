@@ -25,6 +25,8 @@ interface RetroWindowProps {
   initialSize?: Size;
   folderType: string;
   isActive?: boolean;
+  onClick?: () => void;
+  zIndex?: number;
 }
 
 export function RetroWindow({
@@ -39,7 +41,9 @@ export function RetroWindow({
   initialPosition = { x: 50, y: 50 },
   initialSize = { width: 500, height: 400 },
   folderType,
-  isActive = false
+  isActive = false,
+  onClick,
+  zIndex = 1
 }: RetroWindowProps) {
   const [activeCategory, setActiveCategory] = useState<string | undefined>(
     initialCategory || (categories.length > 0 ? categories[0] : undefined)
@@ -78,6 +82,12 @@ export function RetroWindow({
   // Handle window dragging
   const handleTitleMouseDown = (e: React.MouseEvent) => {
     if (isMaximized) return;
+    
+    // Bring window to front when starting drag
+    if (onClick) {
+      onClick();
+    }
+    
     setIsDragging(true);
     setDragOffset({
       x: e.clientX - position.x,
@@ -90,6 +100,12 @@ export function RetroWindow({
     if (isMaximized) return;
     e.preventDefault();
     e.stopPropagation();
+    
+    // Bring window to front when starting resize
+    if (onClick) {
+      onClick();
+    }
+    
     setResizing(direction);
     dragRef.current = {
       startX: e.clientX,
@@ -247,49 +263,49 @@ export function RetroWindow({
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
-        zIndex: isActive || isDragging || resizing ? 10 : 1
+        zIndex: zIndex
       }}
       className={cn(
         "flex flex-col bg-[#000000] rounded-none border-t border-l border-[#6D6DD0] border-r border-b border-[#6D6DD0] shadow-md border-4",
         "overflow-hidden",
         className
       )}
+      onClick={onClick}
     >
       {/* Title Bar - Made draggable */}
       <div 
         className={cn(
-          "flex items-center justify-between px-1 py-0.5 text-[#6D6DD0] bg-[#000000] text-xs font-bold border-b-4 border-[#6D6DD0]",
+          "flex items-center justify-between px-2 pb-1.5 pt-0 text-[#6D6DD0] bg-[#000000] text-sm font-bold border-b-4 border-[#6D6DD0]",
           !isMaximized && (isDragging ? "cursor-grabbing" : "cursor-grab")
         )}
         onMouseDown={handleTitleMouseDown}
-        onDoubleClick={toggleMaximize}
       >
         <div className="flex items-center">
-          <span className="ml-1">{title}</span>
+          <span className="ml-1 font-minecraft flex items-center leading-none -mt-1">{title}</span>
         </div>
         <div className="flex gap-1">
           <button 
-            className="w-4 h-4 bg-[#6D6DD0] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] flex items-center justify-center text-black text-xs"
+            className="w-5 h-5 bg-[#6D6DD0] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] flex items-center justify-center text-black text-xs"
             onClick={handleMinimize}
             aria-label="Minimize"
           >
-            <div className="w-[6px] h-[1px] bg-[#000000] mb-[1px] mt-auto"></div>
+            <div className="w-[7px] h-[1px] bg-[#000000] mb-[1px] mt-auto"></div>
           </button>
           <button 
-            className="w-4 h-4 bg-[#6D6DD0] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] flex items-center justify-center text-black text-xs"
+            className="w-5 h-5 bg-[#6D6DD0] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] flex items-center justify-center text-black text-xs"
             aria-label="Maximize (disabled)"
             disabled
           >
-            <div className="w-[8px] h-[8px] border-2 border-[#000000] bg-transparent"></div>
+            <div className="w-[9px] h-[9px] border-2 border-[#000000] bg-transparent"></div>
           </button>
           <button 
-            className="w-4 h-4 bg-[#6D6DD0] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] flex items-center justify-center text-black text-xs hover:bg-[#8080ED]"
+            className="w-5 h-5 bg-[#6D6DD0] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] flex items-center justify-center text-black text-xs hover:bg-[#8080ED]"
             onClick={handleClose}
             aria-label="Close"
           >
-            <div className="relative w-[8px] h-[8px]">
-              <div className="absolute bg-[#000000] w-[8px] h-[2px] top-[3px] transform rotate-45"></div>
-              <div className="absolute bg-[#000000] w-[8px] h-[2px] top-[3px] transform -rotate-45"></div>
+            <div className="relative w-[9px] h-[9px]">
+              <div className="absolute bg-[#000000] w-[9px] h-[2px] top-[3.5px] transform rotate-45"></div>
+              <div className="absolute bg-[#000000] w-[9px] h-[2px] top-[3.5px] transform -rotate-45"></div>
             </div>
           </button>
         </div>
@@ -303,8 +319,8 @@ export function RetroWindow({
               key={category}
               onClick={() => setActiveCategory(category)}
               className={cn(
-                "px-2 py-0.5 text-xs mr-1 text-[#6D6DD0]",
-                activeCategory === category && "bg-[#000000] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#6D6DD0,inset_2px_2px_0_#6D6DD0]"
+                "px-2 py-1 text-xs mr-1 text-[#6D6DD0] font-minecraft flex items-center leading-none -mt-1",
+                activeCategory === category && "bg-[#000000] border-t-1 border-l-1 border-[#6D6DD0] border-r-1 border-b-1 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#6D6DD0,inset_2px_2px_0_#6D6DD0]"
               )}
             >
               {category.length > 0 ? (
@@ -319,7 +335,7 @@ export function RetroWindow({
       )}
 
       {/* Content Area */}
-      <div className="flex-1 overflow-hidden border-t-4 border-l-4 border-[#6D6DD0] bg-[#000000] shadow-[inset_2px_2px_0_#6D6DD0]">
+      <div className="flex-1 overflow-hidden border-t-1 border-l-1 border-[#6D6DD0] bg-[#000000] shadow-[inset_2px_2px_0_#6D6DD0] font-minecraft">
         {activeCategory ? (
           <Gallery 
             category={getFolderName(folderType)} 

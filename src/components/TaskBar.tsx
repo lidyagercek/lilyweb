@@ -42,7 +42,7 @@ export function TaskBar({
       {/* Start Button - Use children if provided, otherwise use default */}
       {children || (
         <button 
-          className="h-8 px-2 flex items-center mr-1 font-bold text-sm border-4 border-[#6D6DD0] rounded-none shadow-[inset_-2px_-2px_0_#000000,inset_2px_2px_0_#6D6DD0] bg-[#000000] text-[#6D6DD0]"
+          className="h-8 px-2 flex items-center justify-center mr-1 font-bold text-sm border-[#6D6DD0] bg-[#000000] text-[#6D6DD0]"
           onClick={openStartMenu}
         >
           <img 
@@ -63,12 +63,17 @@ export function TaskBar({
               e.currentTarget.parentElement?.insertBefore(fallbackDiv, e.currentTarget.nextSibling);
             }}
           />
-          <span>Start</span>
+          <div className="flex items-center h-full">
+            <div className="px-2 font-bold text-[#6D6DD0] bg-[#000000] border-t-1 border-l-1 border-r-1 border-[#6D6DD0] rounded-t-sm h-full flex items-center">
+              <span className="font-minecraft flex items-center leading-none -mt-1">START</span>
+            </div>
+            <div className="w-px h-8 mx-1 bg-[#6D6DD0] shadow-[1px_0_0_#6D6DD0]"></div>
+          </div>
         </button>
       )}
 
       {/* Divider */}
-      <div className="w-1 h-8 mx-1 bg-[#6D6DD0] shadow-[2px_0_0_#6D6DD0]"></div>
+      <div className="w-1 h-8 mx-1 bg-[#6D6DD0] shadow-[1px_0_0_#6D6DD0]"></div>
 
       {/* Window Buttons */}
       <div className="flex-1 flex items-center overflow-x-auto space-x-1 px-1">
@@ -76,17 +81,17 @@ export function TaskBar({
           <button
             key={windowId}
             className={cn(
-              "h-8 px-2 flex-shrink-0 min-w-24 max-w-40 flex items-center text-sm truncate text-[#6D6DD0]",
+              "h-8 px-2 flex-shrink-0 min-w-24 max-w-40 flex items-center justify-center text-sm truncate text-[#6D6DD0]",
               minimizedWindows.includes(windowId)
-                ? "border-4 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#000000,inset_2px_2px_0_#6D6DD0] opacity-70 bg-[#000000]" 
+                ? "border-2 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#000000,inset_2px_2px_0_#6D6DD0] opacity-70 bg-[#000000]" 
                 : currentWindow === windowId 
-                  ? "border-4 border-[#6D6DD0] shadow-[inset_2px_2px_0_#6D6DD0] bg-[#000000]" 
-                  : "border-4 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#000000,inset_2px_2px_0_#6D6DD0] bg-[#000000]"
+                  ? "border-2 border-[#6D6DD0] shadow-[inset_2px_2px_0_#6D6DD0] bg-[#000000]" 
+                  : "border-2 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#000000,inset_2px_2px_0_#6D6DD0] bg-[#000000]"
             )}
             onClick={() => onWindowSelect(windowId)}
           >
             <div className="w-4 h-4 mr-2 bg-[#252547] border-2 border-[#6D6DD0]"></div>
-            <span className="truncate">{getWindowName(windowId)}</span>
+            <span className="truncate font-minecraft flex items-center leading-none -mt-1">{getWindowName(windowId)}</span>
           </button>
         ))}
       </div>

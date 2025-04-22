@@ -1,6 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Minecraft Font Definition */
+@font-face {
+  font-family: 'Minecraftia';
+  src: url('/Minecraftia-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Windows 95 Font Face Definitions */
+@font-face {
+  font-family: 'MS Sans Serif';
+  src: url('/fonts/ms-sans-serif.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pixelated MS Sans Serif';
+  src: url('/fonts/ms-sans-serif-pixel.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -61,6 +88,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-retro;
   }
 }

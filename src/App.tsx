@@ -9,14 +9,31 @@ export default function App() {
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
   const [maximizedWindow, setMaximizedWindow] = useState<string | null>(null);
+  const [windowZIndices, setWindowZIndices] = useState<Record<string, number>>({});
+  const [topZIndex, setTopZIndex] = useState(10);
 
   const startMenuRef = useRef<HTMLDivElement>(null);
   const startButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Function to bring a window to the front
+  const bringToFront = (windowId: string) => {
+    const newZIndex = topZIndex + 1;
+    setWindowZIndices(prev => ({
+      ...prev,
+      [windowId]: newZIndex
+    }));
+    setTopZIndex(newZIndex);
+  };
 
   // Function to handle opening a window
   const openWindow = (windowId: string) => {
     if (!activeWindows.includes(windowId)) {
       setActiveWindows(prev => [...prev, windowId]);
+      // Set initial z-index for new window
+      bringToFront(windowId);
+    } else {
+      // If window already exists, just bring it to front
+      bringToFront(windowId);
     }
     
     // Remove from minimized if it was minimized
@@ -25,6 +42,12 @@ export default function App() {
     }
     
     setActiveWindow(windowId);
+  };
+
+  // Function to handle window click (to bring it to front)
+  const handleWindowClick = (windowId: string) => {
+    setActiveWindow(windowId);
+    bringToFront(windowId);
   };
 
   // Function to handle closing a window
@@ -57,11 +80,20 @@ export default function App() {
       
       if (visibleWindows.length > 0) {
         // Set the last visible window as active
-        setActiveWindow(visibleWindows[visibleWindows.length - 1]);
+        const lastWindow = visibleWindows[visibleWindows.length - 1];
+        setActiveWindow(lastWindow);
+        bringToFront(lastWindow);
       } else {
         setActiveWindow(null);
       }
     }
+    
+    // Remove z-index entry
+    setWindowZIndices(prev => {
+      const newZIndices = {...prev};
+      delete newZIndices[windowId];
+      return newZIndices;
+    });
   };
 
   // Function to handle minimizing a window
@@ -77,7 +109,9 @@ export default function App() {
       );
       
       if (otherOpenWindows.length > 0) {
-        setActiveWindow(otherOpenWindows[otherOpenWindows.length - 1]);
+        const lastWindow = otherOpenWindows[otherOpenWindows.length - 1];
+        setActiveWindow(lastWindow);
+        bringToFront(lastWindow);
       } else {
         setActiveWindow(null);
       }
@@ -98,8 +132,9 @@ export default function App() {
       setMaximizedWindow(windowId);
     }
     
-    // Ensure the window is active
+    // Ensure the window is active and on top
     setActiveWindow(windowId);
+    bringToFront(windowId);
     
     // Ensure it's not minimized
     if (minimizedWindows.includes(windowId)) {
@@ -140,7 +175,7 @@ export default function App() {
       <div className="flex-1 relative">
         {/* Desktop Icons */}
         <div className="w-64 ml-8">
-          <div className="flex flex-col flex-wrap h-[740px] gap-4 mt-8 z-0">
+          <div className="flex flex-col flex-wrap h-[740px] gap-7 mt-8 z-0">
             <FolderIcon 
               label="About Me" 
               selected={activeWindow === "about-me"}
@@ -192,6 +227,8 @@ export default function App() {
             initialSize={{ width: 600, height: 400 }}
             folderType="2d-arts"
             isActive={activeWindow === "2d-arts"}
+            onClick={() => handleWindowClick("2d-arts")}
+            zIndex={windowZIndices["2d-arts"] || 1}
           />
         )}
 
@@ -206,6 +243,8 @@ export default function App() {
             initialSize={{ width: 520, height: 380 }}
             folderType="3d-works"
             isActive={activeWindow === "3d-works"}
+            onClick={() => handleWindowClick("3d-works")}
+            zIndex={windowZIndices["3d-works"] || 1}
           />
         )}
 
@@ -220,6 +259,8 @@ export default function App() {
             initialSize={{ width: 460, height: 340 }}
             folderType="pixel-arts"
             isActive={activeWindow === "pixel-arts"}
+            onClick={() => handleWindowClick("pixel-arts")}
+            zIndex={windowZIndices["pixel-arts"] || 1}
           />
         )}
 
@@ -234,6 +275,8 @@ export default function App() {
             initialSize={{ width: 560, height: 400 }}
             folderType="animations"
             isActive={activeWindow === "animations"}
+            onClick={() => handleWindowClick("animations")}
+            zIndex={windowZIndices["animations"] || 1}
           />
         )}
 
@@ -248,6 +291,8 @@ export default function App() {
             initialSize={{ width: 500, height: 370 }}
             folderType="tattoos"
             isActive={activeWindow === "tattoos"}
+            onClick={() => handleWindowClick("tattoos")}
+            zIndex={windowZIndices["tattoos"] || 1}
           />
         )}
 
@@ -262,6 +307,8 @@ export default function App() {
             initialSize={{ width: 550, height: 400 }}
             folderType="about-me"
             isActive={activeWindow === "about-me"}
+            onClick={() => handleWindowClick("about-me")}
+            zIndex={windowZIndices["about-me"] || 1}
           />
         )}
       </div>
@@ -273,15 +320,15 @@ export default function App() {
           className="fixed bottom-10 left-1 w-48 bg-[#000000] border-4 border-[#6D6DD0] shadow-md z-50 p-1"
           onClick={e => e.stopPropagation()}
         >
-          <div className="bg-[#000000] text-[#6D6DD0] p-2 flex items-center h-10 border border-[#6D6DD0]">
+          <div className="bg-[#000000] text-[#6D6DD0] p-2 flex items-center h-10 border-1 border-[#6D6DD0]">
             <span className="font-bold rotate-[270deg] text-lg mr-2">▼</span>
-            <span className="font-bold text-sm">Art Portfolio</span>
+            <span className="font-bold text-sm font-minecraft flex items-center leading-none pt-2 -mt-4 relative top-4">Art Portfolio</span>
           </div>
           <div className="border-t-4 border-[#6D6DD0] mt-1 pt-1">
             {["About Me", "2D Arts", "3D Works", "Pixel Arts", "Animations", "Tattoos"].map((name, index) => (
               <button 
                 key={index}
-                className="w-full text-left p-1 hover:bg-[#6D6DD0] hover:text-[#000000] flex items-center text-[#6D6DD0]"
+                className="w-full text-left p-1 hover:bg-[#6D6DD0] hover:text-[#000000] flex items-center text-[#6D6DD0] font-minecraft"
                 onClick={(e) => {
                   e.stopPropagation();
                   const windowId = name.toLowerCase().replace(/\s+/g, '-');
@@ -290,7 +337,7 @@ export default function App() {
                 }}
               >
                 <div className="w-5 h-5 mr-2 bg-[#252547] border-2 border-[#6D6DD0]"></div>
-                {name}
+                <span className="flex items-center leading-none pt-2 -mt-4 relative top-4">{name}</span>
               </button>
             ))}
           </div>

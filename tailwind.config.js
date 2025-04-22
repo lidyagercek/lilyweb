@@ -4,6 +4,12 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Minecraftia', 'Arial', 'sans-serif'],
+        minecraft: ['Minecraftia', 'monospace'],
+        retro: ['Minecraftia', '"MS Sans Serif"', 'Microsoft Sans Serif', 'sans-serif'],
+        pixel: ['Minecraftia', 'Pixelated MS Sans Serif', 'MS Sans Serif', 'sans-serif'],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
