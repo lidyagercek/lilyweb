@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 interface GalleryProps {
   category: string;
   subcategory: string;
+  onSelectItem?: (path: string) => void;
 }
 
 // Function to get the correct public URL for images
@@ -46,11 +47,14 @@ const fetchActualImages = async (category: string, subcategory: string): Promise
     },
     'about-me': {
       'about': ['profile.jpg', 'bio.txt', 'introduction.png'],
-      'skills': ['art-skills.jpg', 'technical-skills.png', 'soft-skills.jpg'],
-      'programs': ['photoshop.png', 'illustrator.png', 'blender.png', 'after-effects.png'],
+      'skills': ['digital-painting.png', 'character-design.png', 'concept-art.png', 'pixel-art.png', 'animation.png', '3d-modeling.png'],
+      'programs': ['photoshop.png', 'illustrator.png', 'blender.png', 'procreate.png', 'after-effects.png', 'clip-studio.png'],
       'work-experience': ['resume.pdf', 'portfolio.jpg', 'achievements.png'],
-      'socials': ['twitter.png', 'instagram.png', 'artstation.png', 'deviantart.png'],
+      'socials': ['instagram.png', 'artstation.png', 'twitter.png', 'deviantart.png', 'behance.png', 'linkedin.png'],
       'contact': ['email.png', 'discord.png', 'form.png']
+    },
+    'wallpapers': {
+      '': ['wallpaper1.jpg', 'wallpaper2.jpg', 'wallpaper3.jpg', 'retro-desktop.png', 'vaporwave.jpg']
     }
   };
 
@@ -58,7 +62,7 @@ const fetchActualImages = async (category: string, subcategory: string): Promise
   return knownImages[category]?.[subcategory] || [];
 };
 
-export function Gallery({ category, subcategory }: GalleryProps) {
+export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
   const [images, setImages] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -144,6 +148,9 @@ export function Gallery({ category, subcategory }: GalleryProps) {
                   onClick={() => {
                     setSelectedImage(image);
                     setViewingImage(image);
+                    if (onSelectItem) {
+                      onSelectItem(imagePath);
+                    }
                   }}
                 >
                   <div className="border-[2.5px] border-[#6D6DD0] flex items-center justify-center overflow-hidden p-1 min-h-[100px] min-w-[100px] max-w-[200px] bg-[#000000]">

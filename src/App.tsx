@@ -12,6 +12,7 @@ export default function App() {
   const [maximizedWindow, setMaximizedWindow] = useState<string | null>(null);
   const [windowZIndices, setWindowZIndices] = useState<Record<string, number>>({});
   const [topZIndex, setTopZIndex] = useState(10);
+  const [wallpaper, setWallpaper] = useState<string | null>(null);
 
   const startMenuRef = useRef<HTMLDivElement>(null);
   const startButtonRef = useRef<HTMLButtonElement>(null);
@@ -171,8 +172,31 @@ export default function App() {
     };
   }, [isStartMenuOpen]);
 
+  // Function to set the wallpaper
+  const setDesktopWallpaper = (imageUrl: string) => {
+    setWallpaper(imageUrl);
+    // Optional: save to localStorage to persist the choice
+    localStorage.setItem('desktop-wallpaper', imageUrl);
+  };
+
+  // Load saved wallpaper on initial render
+  useEffect(() => {
+    const savedWallpaper = localStorage.getItem('desktop-wallpaper');
+    if (savedWallpaper) {
+      setWallpaper(savedWallpaper);
+    }
+  }, []);
+
   return (
-    <div className="h-screen w-full flex flex-col bg-[#000000] p-4 overflow-hidden pb-10">
+    <div 
+      className="h-screen w-full flex flex-col p-4 overflow-hidden pb-10"
+      style={{
+        backgroundColor: '#000000',
+        backgroundImage: wallpaper ? `url(${wallpaper})` : 'none',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }}
+    >
       <div className="flex-1 relative">
         {/* Desktop Icons */}
         <div className="w-64 ml-8">
@@ -312,6 +336,23 @@ export default function App() {
             zIndex={windowZIndices["about-me"] || 1}
           />
         )}
+
+        {activeWindows.includes("wallpapers") && !minimizedWindows.includes("wallpapers") && (
+          <RetroWindow 
+            title="Wallpapers" 
+            categories={[]}
+            onClose={() => closeWindow("wallpapers")}
+            onMinimize={() => minimizeWindow("wallpapers")}
+            onMaximize={() => maximizeWindow("wallpapers")}
+            initialPosition={{ x: 120, y: 60 }}
+            initialSize={{ width: 550, height: 380 }}
+            folderType="wallpapers"
+            isActive={activeWindow === "wallpapers"}
+            onClick={() => handleWindowClick("wallpapers")}
+            zIndex={windowZIndices["wallpapers"] || 1}
+            onSelectItem={(path) => setDesktopWallpaper(`/images/${path}`)}
+          />
+        )}
       </div>
 
       {/* Start Menu */}
@@ -351,6 +392,7 @@ export default function App() {
         currentWindow={activeWindow}
         minimizedWindows={minimizedWindows}
         onWindowSelect={openWindow}
+        onWindowClose={closeWindow}
         openStartMenu={toggleStartMenu}
       />
     </div>

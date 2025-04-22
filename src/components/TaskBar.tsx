@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface TaskBarProps {
@@ -6,9 +6,16 @@ interface TaskBarProps {
   currentWindow: string | null;
   minimizedWindows?: string[];
   onWindowSelect: (windowId: string) => void;
+  onWindowClose?: (windowId: string) => void;
   openStartMenu?: () => void;
   className?: string;
   children?: React.ReactNode;
+}
+
+interface ContextMenuPosition {
+  x: number;
+  y: number;
+  windowId: string;
 }
 
 export function TaskBar({
@@ -16,10 +23,14 @@ export function TaskBar({
   currentWindow,
   minimizedWindows = [],
   onWindowSelect,
+  onWindowClose,
   openStartMenu,
   className,
   children
 }: TaskBarProps) {
+  const [contextMenu, setContextMenu] = useState<ContextMenuPosition | null>(null);
+  const contextMenuRef = useRef<HTMLDivElement>(null);
+
   // Map window IDs to readable names
   const getWindowName = (windowId: string): string => {
     const names: Record<string, string> = {
@@ -27,9 +38,63 @@ export function TaskBar({
       '3d-works': '3D Works',
       'pixel-arts': 'Pixel Arts',
       'animations': 'Animations',
-      'tattoos': 'Tattoo Designs'
+      'tattoos': 'Tattoo Designs',
+      'about-me': 'About Me',
+      'wallpapers': 'Wallpapers'
     };
     return names[windowId] || windowId;
+  };
+
+  // Map window IDs to icon paths
+  const getWindowIcon = (windowId: string): string => {
+    const icons: Record<string, string> = {
+      '2d-arts': '/images/icons/2d_art_icon.png',
+      '3d-works': '/images/icons/3d_art_icon.png',
+      'pixel-arts': '/images/icons/pixel_icon.png',
+      'animations': '/images/icons/animation_icon.png',
+      'tattoos': '/images/icons/tattoo_icon.png',
+      'about-me': '/images/icons/lily_icon.png',
+      'wallpapers': '/images/icons/wallpaper_icon.png'
+    };
+    return icons[windowId] || '';
+  };
+
+  // Handle right-click on taskbar button
+  const handleRightClick = (e: React.MouseEvent, windowId: string) => {
+    e.preventDefault();
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      windowId
+    });
+  };
+
+  // Close context menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        contextMenuRef.current && 
+        !contextMenuRef.current.contains(e.target as Node)
+      ) {
+        setContextMenu(null);
+      }
+    };
+
+    if (contextMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [contextMenu]);
+
+  // Handle context menu close action
+  const handleCloseWindow = () => {
+    if (contextMenu && onWindowClose) {
+      onWindowClose(contextMenu.windowId);
+      setContextMenu(null);
+    }
   };
 
   return (
@@ -88,8 +153,20 @@ export function TaskBar({
                   : "border-2 border-[#6D6DD0] shadow-[bg-[#000000]"
             )}
             onClick={() => onWindowSelect(windowId)}
+            onContextMenu={(e) => handleRightClick(e, windowId)}
           >
-            <div className="w-4 h-4 mr-2 bg-[#252547] border-2 border-[#6D6DD0]"></div>
+            <img 
+              src={getWindowIcon(windowId)}
+              alt=""
+              className="w-4 h-4 mr-2 object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                // Show fallback if image fails to load
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.className = "w-4 h-4 mr-2 bg-[#252547] border-2 border-[#6D6DD0]";
+                e.currentTarget.parentElement?.insertBefore(fallbackDiv, e.currentTarget.nextSibling);
+              }}
+            />
             <span className="truncate font-minecraft flex items-center leading-none mt-0.5">{getWindowName(windowId)}</span>
           </button>
         ))}
@@ -97,6 +174,32 @@ export function TaskBar({
 
       {/* Empty System Tray (without time) */}
       <div className="h-8 w-6 flex items-center"></div>
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <div 
+          ref={contextMenuRef}
+          className="fixed bg-[#000000] border-2 border-[#6D6DD0] shadow-md z-50"
+          style={{ 
+            top: `${contextMenu.y}px`, 
+            left: `${contextMenu.x}px`,
+            transform: 'translate(-50%, -100%)' // Position above cursor
+          }}
+        >
+          <button 
+            className="w-full text-left px-3 py-1 text-[#6D6DD0] hover:bg-[#6D6DD0] hover:text-[#000000] whitespace-nowrap font-minecraft flex items-center"
+            onClick={handleCloseWindow}
+          >
+            <div className="w-4 h-4 bg-[#6D6DD0] flex items-center justify-center mr-2">
+              <div className="relative w-[6px] h-[6px]">
+                <div className="absolute bg-[#000000] w-[6px] h-[1px] top-[2.5px] transform rotate-45"></div>
+                <div className="absolute bg-[#000000] w-[6px] h-[1px] top-[2.5px] transform -rotate-45"></div>
+              </div>
+            </div>
+            Close Window
+          </button>
+        </div>
+      )}
     </div>
   );
 } 
