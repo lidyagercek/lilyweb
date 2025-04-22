@@ -392,40 +392,40 @@ export function RetroWindow({
         <>
           {/* Right edge - exclude top 30px to avoid interfering with title bar buttons */}
           <div 
-            className="absolute right-0 top-[30px] bottom-0 w-6 cursor-ew-resize"
-            style={{ right: '-6px' }}
+            className="absolute right-0 top-[30px] bottom-0 w-10 cursor-ew-resize"
+            style={{ right: '-5px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "e")}
           ></div>
           <div 
-            className="absolute left-0 right-0 bottom-0 h-6 cursor-ns-resize"
-            style={{ bottom: '-6px' }}
+            className="absolute left-0 right-0 bottom-0 h-10 cursor-ns-resize"
+            style={{ bottom: '-5px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "s")}
           ></div>
           <div 
-            className="absolute right-0 bottom-0 w-10 h-10 cursor-nwse-resize"
-            style={{ right: '-6px', bottom: '-6px' }}
+            className="absolute right-0 bottom-0 w-16 h-16 cursor-nwse-resize"
+            style={{ right: '-5px', bottom: '-5px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "se")}
           ></div>
           <div 
-            className="absolute left-0 top-0 bottom-0 w-6 cursor-ew-resize"
-            style={{ left: '-6px' }}
+            className="absolute left-0 top-0 bottom-0 w-10 cursor-ew-resize"
+            style={{ left: '-5px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "w")}
           ></div>
           <div 
-            className="absolute left-[30px] right-[30px] top-0 h-6 cursor-ns-resize"
-            style={{ top: '-6px' }}
+            className="absolute left-[30px] right-[30px] top-0 h-10 cursor-ns-resize"
+            style={{ top: '-5px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "n")}
           ></div>
           <div 
-            className="absolute left-0 bottom-0 w-10 h-10 cursor-nesw-resize"
-            style={{ left: '-6px', bottom: '-6px' }}
+            className="absolute left-0 bottom-0 w-16 h-16 cursor-nesw-resize"
+            style={{ left: '-5px', bottom: '-5px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "sw")}
           ></div>
           {/* Skip top-right corner completely to avoid interfering with close button */}
           {/* Only have resize handle on the far corner, away from buttons */}
           <div 
-            className="absolute left-0 top-0 w-10 h-10 cursor-nwse-resize"
-            style={{ left: '-6px', top: '-6px' }}
+            className="absolute left-0 top-0 w-16 h-16 cursor-nwse-resize"
+            style={{ left: '-5px', top: '-5px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "nw")}
           ></div>
         </>
