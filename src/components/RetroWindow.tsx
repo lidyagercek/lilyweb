@@ -135,51 +135,44 @@ export function RetroWindow({
           y: newY
         });
       } else if (resizing) {
+        // Compute deltas
         const dx = e.clientX - dragRef.current.startX;
         const dy = e.clientY - dragRef.current.startY;
-
-        // Resize based on direction
+        // Starting values
+        let newWidth = dragRef.current.startWidth;
+        let newHeight = dragRef.current.startHeight;
+        let newX = position.x;
+        let newY = position.y;
+        const taskbarHeight = 40;
+        // East
         if (resizing.includes("e")) {
-          // Limit right edge to viewport width
-          const newWidth = Math.min(
+          newWidth = Math.min(
             window.innerWidth - position.x,
             Math.max(200, dragRef.current.startWidth + dx)
           );
-          setSize({ ...size, width: newWidth });
         }
+        // South
         if (resizing.includes("s")) {
-          // Limit bottom edge to viewport height, accounting for taskbar
-          const taskbarHeight = 40;
-          const newHeight = Math.min(
+          newHeight = Math.min(
             window.innerHeight - position.y - taskbarHeight,
             Math.max(150, dragRef.current.startHeight + dy)
           );
-          setSize({ ...size, height: newHeight });
         }
+        // West
         if (resizing.includes("w")) {
-          const newWidth = Math.max(200, dragRef.current.startWidth - dx);
-          const newX = dragRef.current.startPosX + dragRef.current.startWidth - newWidth;
-          // Don't allow window to move out of left edge
-          if (newX >= 0) {
-            setSize({ ...size, width: newWidth });
-            setPosition({
-              ...position,
-              x: newX
-            });
-          }
+          newWidth = Math.max(200, dragRef.current.startWidth - dx);
+          const calcX = dragRef.current.startPosX + dragRef.current.startWidth - newWidth;
+          if (calcX >= 0) newX = calcX;
         }
+        // North
         if (resizing.includes("n")) {
-          const newHeight = Math.max(150, dragRef.current.startHeight - dy);
-          const newY = dragRef.current.startPosY + dragRef.current.startHeight - newHeight;
-          // Don't allow window to move out of top edge
-          if (newY >= 0) {
-            setSize({ ...size, height: newHeight });
-            setPosition({
-              ...position,
-              y: newY
-            });
-          }
+          newHeight = Math.max(150, dragRef.current.startHeight - dy);
+          const calcY = dragRef.current.startPosY + dragRef.current.startHeight - newHeight;
+          if (calcY >= 0) newY = calcY;
         }
+        // Apply updates together (supports diagonal)
+        setSize({ width: newWidth, height: newHeight });
+        setPosition({ x: newX, y: newY });
       }
     };
     

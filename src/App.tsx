@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { FolderIcon } from "./components/FolderIcon";
 import { RetroWindow } from "./components/RetroWindow";
 import { TaskBar } from "./components/TaskBar";
+import "./index.css"
 
 export default function App() {
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
