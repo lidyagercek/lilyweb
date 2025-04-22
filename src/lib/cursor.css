@@ -1,0 +1,65 @@
+/* 
+ * Custom cursor styles for retro Windows-style cursors
+ */
+
+/* Default cursor */
+.cursor-default {
+  cursor: url('/images/cursors/normal.png'), auto;
+}
+
+/* Pointer cursor (for clickable elements) */
+.cursor-pointer {
+  cursor: url('/images/cursors/pointer.png'), pointer;
+}
+
+/* Text cursor */
+.cursor-text {
+  cursor: url('/images/cursors/text.png'), text;
+}
+
+/* Loading cursor */
+.cursor-loading {
+  cursor: url('/images/cursors/loading.png'), wait;
+}
+
+/* Not allowed cursor */
+.cursor-not-allowed {
+  cursor: url('/images/cursors/not-allowed.png'), not-allowed;
+}
+
+/* Move cursor */
+.cursor-move {
+  cursor: url('/images/cursors/move.png'), move;
+}
+
+/* Resize cursors */
+.cursor-ns-resize {
+  cursor: url('/images/cursors/ns-resize.png'), ns-resize;
+}
+
+.cursor-ew-resize {
+  cursor: url('/images/cursors/ew-resize.png'), ew-resize;
+}
+
+.cursor-nwse-resize {
+  cursor: url('/images/cursors/nwse-resize.png'), nwse-resize;
+}
+
+.cursor-nesw-resize {
+  cursor: url('/images/cursors/nesw-resize.png'), nesw-resize;
+}
+
+/* Apply default cursor to body */
+body {
+  cursor: url('/images/cursors/normal.png'), auto;
+}
+
+/* Apply pointer cursor to buttons and links */
+button, a, [role="button"] {
+  cursor: url('/images/cursors/pointer.png'), pointer;
+}
+
+/* Apply text cursor to input and textarea */
+input, textarea {
+  cursor: url('/images/cursors/text.png'), text;
+} 

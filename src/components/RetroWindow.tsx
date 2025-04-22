@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Gallery } from "./Gallery";
+import { AboutContent } from "./AboutContent";
 
 interface Position {
   x: number;
@@ -27,6 +28,7 @@ interface RetroWindowProps {
   isActive?: boolean;
   onClick?: () => void;
   zIndex?: number;
+  onSelectItem?: (path: string) => void;
 }
 
 export function RetroWindow({
@@ -43,7 +45,8 @@ export function RetroWindow({
   folderType,
   isActive = false,
   onClick,
-  zIndex = 1
+  zIndex = 1,
+  onSelectItem
 }: RetroWindowProps) {
   const [activeCategory, setActiveCategory] = useState<string | undefined>(
     initialCategory || (categories.length > 0 ? categories[0] : undefined)
@@ -93,6 +96,9 @@ export function RetroWindow({
       x: e.clientX - position.x,
       y: e.clientY - position.y
     });
+    
+    // Add cursor-move class to body when dragging
+    document.body.classList.add('cursor-move');
   };
   
   // Handle window resizing
@@ -115,6 +121,23 @@ export function RetroWindow({
       startWidth: size.width,
       startHeight: size.height,
     };
+    
+    // Add resize cursor class to body based on direction
+    if (direction.includes('n') && direction.includes('s')) {
+      document.body.classList.add('cursor-ns-resize');
+    } else if (direction.includes('e') && direction.includes('w')) {
+      document.body.classList.add('cursor-ew-resize');
+    } else if ((direction.includes('n') && direction.includes('w')) || 
+               (direction.includes('s') && direction.includes('e'))) {
+      document.body.classList.add('cursor-nwse-resize');
+    } else if ((direction.includes('n') && direction.includes('e')) || 
+               (direction.includes('s') && direction.includes('w'))) {
+      document.body.classList.add('cursor-nesw-resize');
+    } else if (direction.includes('n') || direction.includes('s')) {
+      document.body.classList.add('cursor-ns-resize');
+    } else if (direction.includes('e') || direction.includes('w')) {
+      document.body.classList.add('cursor-ew-resize');
+    }
   };
   
   // Use effect for mouse move and mouse up events
@@ -179,6 +202,15 @@ export function RetroWindow({
     const handleMouseUp = () => {
       setIsDragging(false);
       setResizing(null);
+      
+      // Remove all cursor classes from body
+      document.body.classList.remove(
+        'cursor-move', 
+        'cursor-ns-resize', 
+        'cursor-ew-resize', 
+        'cursor-nwse-resize', 
+        'cursor-nesw-resize'
+      );
     };
     
     if (isDragging || resizing) {
@@ -189,6 +221,15 @@ export function RetroWindow({
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      
+      // Clean up cursor classes when component unmounts
+      document.body.classList.remove(
+        'cursor-move', 
+        'cursor-ns-resize', 
+        'cursor-ew-resize', 
+        'cursor-nwse-resize', 
+        'cursor-nesw-resize'
+      );
     };
   }, [isDragging, resizing, position, size]);
 
@@ -269,14 +310,14 @@ export function RetroWindow({
       <div 
         className={cn(
           "flex items-center justify-between px-2 py-1.5 text-[#6D6DD0] bg-[#000000] text-sm font-bold border-b-4 border-[#6D6DD0]",
-          !isMaximized && (isDragging ? "cursor-grabbing" : "cursor-grab")
+          !isMaximized && (isDragging ? "cursor-move" : "cursor-pointer")
         )}
         onMouseDown={handleTitleMouseDown}
       >
         <div className="flex items-center">
           <span className="ml-1 font-minecraft flex items-center leading-none ">{title}</span>
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 relative z-20">
           <button 
             className="w-5 h-5 bg-[#6D6DD0] border-t-2 border-l-2 border-[#6D6DD0] border-r-2 border-b-2 border-[#6D6DD0] flex items-center justify-center text-black text-xs"
             onClick={handleMinimize}
@@ -329,15 +370,19 @@ export function RetroWindow({
 
       {/* Content Area */}
       <div className="flex-1 overflow-hidden border-t-1 border-l-1 border-[#6D6DD0] bg-[#000000] shadow-[inset_2px_2px_0_#6D6DD0] font-minecraft">
-        {activeCategory ? (
+        {folderType === "about-me" ? (
+          <AboutContent subcategory={activeCategory ? getFolderName(activeCategory) : ""} />
+        ) : activeCategory ? (
           <Gallery 
             category={getFolderName(folderType)} 
             subcategory={getFolderName(activeCategory)}
+            onSelectItem={onSelectItem}
           />
         ) : (
           <Gallery 
             category={getFolderName(folderType)} 
             subcategory=""
+            onSelectItem={onSelectItem}
           />
         )}
       </div>
@@ -345,36 +390,42 @@ export function RetroWindow({
       {/* Resize Handles - Only shown when not maximized */}
       {!isMaximized && (
         <>
+          {/* Right edge - exclude top 30px to avoid interfering with title bar buttons */}
           <div 
-            className="absolute right-0 top-0 bottom-0 w-1 cursor-e-resize"
+            className="absolute right-0 top-[30px] bottom-0 w-6 cursor-ew-resize"
+            style={{ right: '-6px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "e")}
           ></div>
           <div 
-            className="absolute left-0 right-0 bottom-0 h-1 cursor-s-resize"
+            className="absolute left-0 right-0 bottom-0 h-6 cursor-ns-resize"
+            style={{ bottom: '-6px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "s")}
           ></div>
           <div 
-            className="absolute right-0 bottom-0 w-3 h-3 cursor-se-resize"
+            className="absolute right-0 bottom-0 w-10 h-10 cursor-nwse-resize"
+            style={{ right: '-6px', bottom: '-6px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "se")}
           ></div>
           <div 
-            className="absolute left-0 top-0 bottom-0 w-1 cursor-w-resize"
+            className="absolute left-0 top-0 bottom-0 w-6 cursor-ew-resize"
+            style={{ left: '-6px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "w")}
           ></div>
           <div 
-            className="absolute left-0 right-0 top-0 h-1 cursor-n-resize"
+            className="absolute left-[30px] right-[30px] top-0 h-6 cursor-ns-resize"
+            style={{ top: '-6px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "n")}
           ></div>
           <div 
-            className="absolute left-0 bottom-0 w-3 h-3 cursor-sw-resize"
+            className="absolute left-0 bottom-0 w-10 h-10 cursor-nesw-resize"
+            style={{ left: '-6px', bottom: '-6px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "sw")}
           ></div>
+          {/* Skip top-right corner completely to avoid interfering with close button */}
+          {/* Only have resize handle on the far corner, away from buttons */}
           <div 
-            className="absolute right-0 top-0 w-3 h-3 cursor-ne-resize"
-            onMouseDown={(e) => handleResizeMouseDown(e, "ne")}
-          ></div>
-          <div 
-            className="absolute left-0 top-0 w-3 h-3 cursor-nw-resize"
+            className="absolute left-0 top-0 w-10 h-10 cursor-nwse-resize"
+            style={{ left: '-6px', top: '-6px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "nw")}
           ></div>
         </>
