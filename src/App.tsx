@@ -220,7 +220,7 @@ export default function App() {
         {activeWindows.includes("2d-arts") && !minimizedWindows.includes("2d-arts") && (
           <RetroWindow 
             title="2D Arts" 
-            categories={["Illustrations", "Sketches", "Character/Concept Designs", "Casual Arts"]}
+            categories={["Illustrations", "Sketches", "Character/Concept Designs", "Casual Arts", "Traditional"]}
             onClose={() => closeWindow("2d-arts")}
             onMinimize={() => minimizeWindow("2d-arts")}
             onMaximize={() => maximizeWindow("2d-arts")}

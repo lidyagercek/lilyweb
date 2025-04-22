@@ -20,6 +20,7 @@ const fetchActualImages = async (category: string, subcategory: string): Promise
   // This works around Vite's limitation with public directory imports
   const knownImages: Record<string, Record<string, string[]>> = {
     '2d-arts': {
+      'traditional': [],
       'illustrations': ['illustration1.jpg', 'character-design.png', 'landscape.jpg'],
       'sketches': ['sketch1.jpg', 'sketch2.png', 'quick-drawing.jpg', 'day3.png'],
       'character-concept-designs': ['hero.png', 'villain.jpg', 'npc.png'],
