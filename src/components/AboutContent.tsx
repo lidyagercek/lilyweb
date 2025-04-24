@@ -26,7 +26,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
         'skills': ['digital-painting.png', 'character-design.png', 'concept-art.png', 'pixel-art.png', 'animation.png', '3d-modeling.png'],
         'programs': ['photoshop.png', 'illustrator.png', 'blender.png', 'procreate.png', 'after-effects.png', 'clip-studio.png'],
         'work-experience': ['resume.pdf', 'portfolio.jpg', 'achievements.png'],
-        'socials': ['instagram.png', 'artstation.png', 'twitter.png', 'deviantart.png', 'behance.png', 'linkedin.png'],
         'contact': ['email.png', 'discord.png', 'form.png']
       }
     };
@@ -78,52 +77,66 @@ export function AboutContent({ subcategory }: AboutContentProps) {
           </div>
         );
         
-      case "skills":
+      case "skills-&-programs":
         return (
           <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">My Skills</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {skills.map((skill, index) => (
-                <div 
-                  key={index}
-                  className="p-3 text-center hover:bg-[#16164D] transition-colors"
-                >
-                  {formatImageName(skill)}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-        
-      case "programs":
-        return (
-          <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Programs I Use</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {programs.map((program, index) => (
-                <div 
-                  key={index}
-                  className="p-3 flex flex-col items-center"
-                >
-                  <div className="w-16 h-16 mb-2 flex items-center justify-center">
-                    <img 
-                      src={`/images/about-me/programs/${program.image}`} 
-                      alt={program.name}
-                      className="max-w-full max-h-full"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = `
-                          <div class="w-16 h-16 flex items-center justify-center bg-[#000000]">
-                            <p class="text-xs text-center">${program.name}</p>
-                          </div>
-                        `;
-                      }}
-                    />
+            <h2 className="text-xl font-bold mb-4 text-center">Skills & Programs</h2>
+            
+            {/* Skills Section */}
+            <div className="mb-8">
+              <h3 className="text-lg font-bold mb-3 border-b-2 border-[#6D6DD0] pb-1">My Skills</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                {skills.map((skill, index) => (
+                  <div 
+                    key={index}
+                    className="p-3 text-center hover:bg-[#16164D] transition-colors"
+                  >
+                    {formatImageName(skill)}
                   </div>
-                  <span>{program.name}</span>
-                </div>
-              ))}
+                ))}
+              </div>
+              
+              <p className="mb-6">
+                I specialize in a variety of digital art techniques including illustration, 
+                character design, and animation. With over 5 years of experience in both 2D and 3D art,
+                I pride myself on being versatile and adaptable to different project requirements.
+              </p>
+            </div>
+            
+            {/* Programs Section */}
+            <div>
+              <h3 className="text-lg font-bold mb-3 border-b-2 border-[#6D6DD0] pb-1">Software I Use</h3>
+              <p className="mb-4">
+                I'm proficient in industry-standard creative software, allowing me to deliver 
+                high-quality work across different mediums and formats.
+              </p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {programs.map((program, index) => (
+                  <div 
+                    key={index}
+                    className="p-3 flex flex-col items-center"
+                  >
+                    <div className="w-16 h-16 mb-2 flex items-center justify-center">
+                      <img 
+                        src={`/images/about-me/programs/${program.image}`} 
+                        alt={program.name}
+                        className="max-w-full max-h-full"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          target.parentElement!.innerHTML = `
+                            <div class="w-16 h-16 flex items-center justify-center bg-[#000000]">
+                              <p class="text-xs text-center">${program.name}</p>
+                            </div>
+                          `;
+                        }}
+                      />
+                    </div>
+                    <span>{program.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         );
@@ -165,50 +178,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
                 <p>{job.description}</p>
               </div>
             ))}
-          </div>
-        );
-        
-      case "socials":
-        return (
-          <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Connect With Me</h2>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {[
-                { link: "https://instagram.com/username", image: "instagram.png" },
-                { link: "https://artstation.com/username", image: "artstation.png" },
-                { link: "https://twitter.com/username", image: "twitter.png" },
-                { link: "https://deviantart.com/username", image: "deviantart.png" },
-                { link: "https://behance.net/username", image: "behance.png" },
-                { link: "https://linkedin.com/in/username", image: "linkedin.png" }
-              ].map((social, index) => (
-                <a 
-                  key={index} 
-                  href={social.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 flex flex-col items-center hover:bg-[#16164D] transition-colors"
-                >
-                  <div className="w-12 h-12 mb-2 flex items-center justify-center">
-                    <img 
-                      src={`/images/about-me/socials/${social.image}`} 
-                      alt={formatImageName(social.image)}
-                      className="max-w-full max-h-full"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = `
-                          <div class="w-12 h-12 flex items-center justify-center bg-[#000000]">
-                            <p class="text-xs text-center">${formatImageName(social.image)}</p>
-                          </div>
-                        `;
-                      }}
-                    />
-                  </div>
-                  <span>{formatImageName(social.image)}</span>
-                </a>
-              ))}
-            </div>
           </div>
         );
         
