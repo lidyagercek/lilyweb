@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { FolderIcon } from "./components/FolderIcon";
 import { RetroWindow } from "./components/RetroWindow";
 import { TaskBar } from "./components/TaskBar";
+import { BootSequence } from "./components/BootSequence";
+import { WelcomeNotification } from "./components/WelcomeNotification";
+import { StartMenu } from "./components/StartMenu";
 import "./index.css"
 
 export default function App() {
@@ -13,6 +16,8 @@ export default function App() {
   const [windowZIndices, setWindowZIndices] = useState<Record<string, number>>({});
   const [topZIndex, setTopZIndex] = useState(10);
   const [wallpaper, setWallpaper] = useState<string | null>(null);
+  const [booting, setBooting] = useState(true);
+  const [showWelcomeNotification, setShowWelcomeNotification] = useState(false);
 
   const startMenuRef = useRef<HTMLDivElement>(null);
   const startButtonRef = useRef<HTMLButtonElement>(null);
@@ -44,6 +49,19 @@ export default function App() {
     }
     
     setActiveWindow(windowId);
+  };
+
+  // Function to handle boot sequence completion
+  const handleBootComplete = () => {
+    setBooting(false);
+    setTimeout(() => {
+      setShowWelcomeNotification(true);
+    }, 2000);
+  };
+
+  // Function to handle welcome notification close
+  const handleWelcomeClose = () => {
+    setShowWelcomeNotification(false);
   };
 
   // Function to handle window click (to bring it to front)
@@ -186,6 +204,10 @@ export default function App() {
       setWallpaper(savedWallpaper);
     }
   }, []);
+
+  if (booting) {
+    return <BootSequence onComplete={handleBootComplete} />;
+  }
 
   return (
     <div 
@@ -356,35 +378,11 @@ export default function App() {
       </div>
 
       {/* Start Menu */}
-      {isStartMenuOpen && (
-        <div 
-          ref={startMenuRef}
-          className="fixed bottom-10 left-1 w-48 bg-[#000000] border-4 border-[#6D6DD0] shadow-md z-50 p-1"
-          onClick={e => e.stopPropagation()}
-        >
-          <div className="bg-[#000000] text-[#6D6DD0] p-2 flex items-center h-10 border-1 border-[#6D6DD0]">
-            <span className="font-bold rotate-[270deg] text-lg mr-2">▼</span>
-            <span className="font-bold text-sm font-minecraft flex items-center leading-none pt-2 -mt-10 relative top-4">Art Portfolio</span>
-          </div>
-          <div className="border-t-4 border-[#6D6DD0] mt-1 pt-1">
-            {["About Me", "2D Arts", "3D Works", "Pixel Arts", "Animations", "Tattoos"].map((name, index) => (
-              <button 
-                key={index}
-                className="w-full text-left p-1 hover:bg-[#6D6DD0] hover:text-[#000000] flex items-center text-[#6D6DD0] font-minecraft"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const windowId = name.toLowerCase().replace(/\s+/g, '-');
-                  openWindow(windowId);
-                  setIsStartMenuOpen(false);
-                }}
-              >
-                <div className="w-5 h-5 mr-2 bg-[#252547] border-2 border-[#6D6DD0]"></div>
-                <span className="flex items-center leading-none pt-2">{name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      <StartMenu 
+        isOpen={isStartMenuOpen}
+        onClose={() => setIsStartMenuOpen(false)}
+        onOpenFolder={openWindow}
+      />
 
       {/* Taskbar */}
       <TaskBar 
@@ -394,7 +392,13 @@ export default function App() {
         onWindowSelect={openWindow}
         onWindowClose={closeWindow}
         openStartMenu={toggleStartMenu}
+        isStartMenuOpen={isStartMenuOpen}
       />
+      
+      {/* Welcome Notification */}
+      {showWelcomeNotification && (
+        <WelcomeNotification onClose={handleWelcomeClose} />
+      )}
     </div>
   )
 }

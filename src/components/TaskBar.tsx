@@ -8,6 +8,7 @@ interface TaskBarProps {
   onWindowSelect: (windowId: string) => void;
   onWindowClose?: (windowId: string) => void;
   openStartMenu?: () => void;
+  isStartMenuOpen?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -25,11 +26,36 @@ export function TaskBar({
   onWindowSelect,
   onWindowClose,
   openStartMenu,
+  isStartMenuOpen = false,
   className,
   children
 }: TaskBarProps) {
   const [contextMenu, setContextMenu] = useState<ContextMenuPosition | null>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
+  const startButtonRef = useRef<HTMLButtonElement>(null);
+  const [currentTime, setCurrentTime] = useState<string>('');
+  const [currentDate, setCurrentDate] = useState<string>('');
+
+  // Get and format the current time and date
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      
+      // Format time (HH:MM AM/PM)
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      setCurrentTime(`${formattedHours}:${formattedMinutes} ${ampm}`);
+    };
+
+    // Update time immediately and set up interval
+    updateTime();
+    const intervalId = setInterval(updateTime, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   // Map window IDs to readable names
   const getWindowName = (windowId: string): string => {
@@ -57,6 +83,28 @@ export function TaskBar({
       'wallpapers': '/images/icons/wallpaper_icon.png'
     };
     return icons[windowId] || '';
+  };
+
+  // Play button click sound when clicking taskbar buttons
+  const handleButtonClick = (windowId: string) => {
+    // @ts-ignore - Using global function defined in BootSequence
+    if (window.playSound) {
+      // @ts-ignore
+      window.playSound('button');
+    }
+    onWindowSelect(windowId);
+  };
+
+  // Handle start button click with sound
+  const handleStartClick = () => {
+    // @ts-ignore - Using global function defined in BootSequence
+    if (window.playSound) {
+      // @ts-ignore
+      window.playSound('button');
+    }
+    if (openStartMenu) {
+      openStartMenu();
+    }
   };
 
   // Handle right-click on taskbar button
@@ -107,15 +155,20 @@ export function TaskBar({
       {/* Start Button - Use children if provided, otherwise use default */}
       {children || (
         <button 
-          className="h-8 px-2 flex items-center justify-center mr-1 font-bold text-sm border-[#6D6DD0] bg-[#000000] text-[#6D6DD0]"
-          onClick={openStartMenu}
+          ref={startButtonRef}
+          className={cn(
+            "h-8 px-2 flex items-center justify-center mr-1 font-bold text-sm border-[#6D6DD0] bg-[#000000] text-[#6D6DD0]",
+            isStartMenuOpen && "bg-[#6D6DD0]/20"
+          )}
+          onClick={handleStartClick}
         >
           <img 
             src="/images/icons/windows.png" 
             alt="Windows"
             className="w-6 h-6 mr-1"
             onError={(e) => {
-              e.currentTarget.style.display = 'none';
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
               // Show fallback if image fails to load
               const fallbackDiv = document.createElement('div');
               fallbackDiv.className = "w-6 h-6 mr-1 bg-[#252547] grid grid-cols-2 grid-rows-2";
@@ -152,7 +205,7 @@ export function TaskBar({
                   ? "border-2 border-[#6D6DD0] shadow-[bg-[#000000]" 
                   : "border-2 border-[#6D6DD0] shadow-[bg-[#000000]"
             )}
-            onClick={() => onWindowSelect(windowId)}
+            onClick={() => handleButtonClick(windowId)}
             onContextMenu={(e) => handleRightClick(e, windowId)}
           >
             <img 
@@ -172,8 +225,54 @@ export function TaskBar({
         ))}
       </div>
 
-      {/* Empty System Tray (without time) */}
-      <div className="h-8 w-6 flex items-center"></div>
+      {/* System Tray with Icons and Time */}
+      <div className="flex items-center gap-2 px-2">
+        {/* System Icons */}
+        <div className="flex items-center gap-1">
+          <button className="w-5 h-5 flex items-center justify-center">
+            <img 
+              src="/images/icons/icon1.png" 
+              alt="Icon 1"
+              className="w-4 h-4"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </button>
+          <button className="w-5 h-5 flex items-center justify-center">
+            <img 
+              src="/images/icons/icon2.png" 
+              alt="Icon 2"
+              className="w-4 h-4"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </button>
+          <button className="w-5 h-5 flex items-center justify-center">
+            <img 
+              src="/images/icons/icon3.png" 
+              alt="Icon 3"
+              className="w-4 h-4"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </button>
+        </div>
+        
+        {/* Divider */}
+        <div className="w-px h-6 bg-[#6D6DD0]/50"></div>
+        
+        {/* Time */}
+        <div className="text-[#6D6DD0] font-minecraft text-xs font-bold">
+          {currentTime}
+        </div>
+        
+        {/* Show Desktop area */}
+        <div className="w-px h-6 bg-[#6D6DD0]/50 ml-1"></div>
+        <div className="w-3 h-8 cursor-pointer" title="Show Desktop"></div>
+      </div>
 
       {/* Context Menu */}
       {contextMenu && (
