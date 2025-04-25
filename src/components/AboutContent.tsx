@@ -231,7 +231,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
                 { name: "YouTube (i)", link: "https://www.youtube.com/@Lillulette/", icon: "YouTube_Inactive.png" },
                 { name: "X / Twitter (i)", link: "https://x.com/lillulette/", icon: "X_Twitter_Inactive.png" },
                 { name: "Itch.io", link: "https://lillulette.itch.io/", icon: "Itch_Io.png" },
-                { name: "GitHub", link: "https://github.com/lidyagercek/", icon: "GitHub_Inactive.png" },
+                { name: "GitHub (i)", link: "https://github.com/lidyagercek/", icon: "GitHub_Inactive.png" },
                 { name: "Art Instagram (i)", link: "https://instagram.com/lillulette/", icon: "Instagram_Inactive.png" },
                 { name: "Tattoo Instagram", link: "https://instagram.com/lillulettoo/", icon: "Instagram_Active.png" }
               ].map((social, index) => (
