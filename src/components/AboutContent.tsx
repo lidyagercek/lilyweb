@@ -24,8 +24,34 @@ export function AboutContent({ subcategory }: AboutContentProps) {
     const knownImages: Record<string, Record<string, string[]>> = {
       'about-me': {
         'about': ['profile.jpg', 'bio.txt', 'introduction.png'],
-        'skills': ['digital-painting.png', 'character-design.png', 'concept-art.png', 'pixel-art.png', 'animation.png', '3d-modeling.png'],
-        'programs': ['photoshop.png', 'illustrator.png', 'blender.png', 'procreate.png', 'after-effects.png', 'clip-studio.png'],
+        'skills': [
+          '2D_Digital_Art_and_Illustration.png',
+          'Character_Design.png',
+          'Concept_Design.png',
+          'Pixel_Art.png',
+          '2D_Digital_Animation.png',
+          '3D_Modeling.png',
+          '3D_Animation.png',
+          '2D_Bone_Animation.png',
+          '2D_Rigging.png',
+          '2D_Traditional_Animation.png',
+          'Pixel_Animation.png',
+          '3D_Hand_Painting_and_Texturing.png',
+          'Traditional_Art.png',
+          'Storyboarding.png',
+          'UI_Design.png'
+        ],
+        'programs': [
+          'Adobe_Photoshop.png',
+          'Clip_Studio_Paint.png',
+          'Blender.png',
+          'Adobe_After_Effects.png',
+          'Adobe_Animate.png',
+          'Adobe_Flash.png',
+          'Aseprite.png',
+          'Live2D_Cubism.png',
+          'Unity.png'
+        ],
         'work-experience': ['resume.pdf', 'portfolio.jpg', 'achievements.png'],
         'socials': ['instagram.png', 'artstation.png', 'twitter.png', 'deviantart.png', 'behance.png', 'linkedin.png'],
         'contact': ['email.png', 'discord.png', 'form.png']
@@ -202,7 +228,14 @@ export function AboutContent({ subcategory }: AboutContentProps) {
             <h2 className="text-xl font-bold mb-4 text-center">Connect With Me</h2>
             
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {socials.map((social, index) => (
+              {[
+                { name: "Instagram", link: "https://instagram.com/username" },
+                { name: "Artstation", link: "https://artstation.com/username" },
+                { name: "Twitter", link: "https://twitter.com/username" },
+                { name: "Deviantart", link: "https://deviantart.com/username" },
+                { name: "Behance", link: "https://behance.net/username" },
+                { name: "LinkedIn", link: "https://linkedin.com/in/username" }
+              ].map((social, index) => (
                 <a 
                   key={index} 
                   href={social.link}
@@ -210,21 +243,8 @@ export function AboutContent({ subcategory }: AboutContentProps) {
                   rel="noopener noreferrer"
                   className="p-2 flex flex-col items-center"
                 >
-                  <div className="w-16 h-16 mb-1 flex items-center justify-center">
-                    <img 
-                      src={`/images/about-me/socials/${social.image}`} 
-                      alt={social.name}
-                      className="max-w-full max-h-full"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = `
-                          <div class="w-16 h-16 flex items-center justify-center bg-[#000000]">
-                            <p class="text-xs text-center">${social.name}</p>
-                          </div>
-                        `;
-                      }}
-                    />
+                  <div className="w-16 h-16 mb-1 flex items-center justify-center bg-[#16164D] rounded-full">
+                    <span className="text-center text-lg">{social.name.charAt(0)}</span>
                   </div>
                   <span>{social.name}</span>
                 </a>
