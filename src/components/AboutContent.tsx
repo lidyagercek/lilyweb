@@ -228,12 +228,12 @@ export function AboutContent({ subcategory }: AboutContentProps) {
             
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {[
-                { name: "YouTube (i)", link: "https://www.youtube.com/@Lillulette/" },
-                { name: "X / Twitter (i)", link: "https://x.com/lillulette/" },
-                { name: "Itch.io", link: "https://lillulette.itch.io/" },
-                { name: "GitHub", link: "https://github.com/lidyagercek/" },
-                { name: "Art Instagram (i)", link: "https://instagram.com/lillulette/" },
-                { name: "Tattoo Instagram", link: "https://instagram.com/lillulettoo/" }
+                { name: "YouTube (i)", link: "https://www.youtube.com/@Lillulette/", icon: "YouTube_Inactive.png" },
+                { name: "X / Twitter (i)", link: "https://x.com/lillulette/", icon: "X_Twitter_Inactive.png" },
+                { name: "Itch.io", link: "https://lillulette.itch.io/", icon: "Itch_Io.png" },
+                { name: "GitHub", link: "https://github.com/lidyagercek/", icon: "GitHub_Inactive.png" },
+                { name: "Art Instagram (i)", link: "https://instagram.com/lillulette/", icon: "Instagram_Active.png" },
+                { name: "Tattoo Instagram", link: "https://instagram.com/lillulettoo/", icon: "Instagram_Inactive.png" }
               ].map((social, index) => (
                 <a 
                   key={index} 
@@ -242,8 +242,21 @@ export function AboutContent({ subcategory }: AboutContentProps) {
                   rel="noopener noreferrer"
                   className="p-2 flex flex-col items-center"
                 >
-                  <div className="w-16 h-16 mb-1 flex items-center justify-center bg-[#16164D] rounded-full">
-                    <span className="text-center text-lg">{social.name.charAt(0)}</span>
+                  <div className="w-16 h-16 mb-1 flex items-center justify-center">
+                    <img 
+                      src={`/images/about-me/socials/${social.icon}`} 
+                      alt={social.name}
+                      className="max-w-full max-h-full"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        target.parentElement!.innerHTML = `
+                          <div class="w-16 h-16 flex items-center justify-center bg-[#16164D] rounded-full">
+                            <span class="text-center text-lg">${social.name.charAt(0)}</span>
+                          </div>
+                        `;
+                      }}
+                    />
                   </div>
                   <span>{social.name}</span>
                 </a>
