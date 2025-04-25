@@ -108,7 +108,7 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
       {loading ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="bg-[#000000] border border-[#6D6DD0] shadow-[inset_-1px_-1px_0_#6D6DD0,inset_1px_1px_0_#6D6DD0] p-4">
-            <p className="text-sm text-[#6D6DD0]">Loading...</p>
+            <p className="text-sm text-[#6D6DD0]">Loading..</p>
           </div>
         </div>
       ) : images.length === 0 ? (
