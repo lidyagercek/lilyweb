@@ -53,7 +53,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
           'Unity.png'
         ],
         'work-experience': ['resume.pdf', 'portfolio.jpg', 'achievements.png'],
-        'socials': ['instagram.png', 'artstation.png', 'twitter.png', 'deviantart.png', 'behance.png', 'linkedin.png'],
+        'socials': ['Itch_Io.png', 'YouTube_Inactive.png', 'X_Twitter_Inactive.png', 'Github_Inactive.png', 'Instagram_Active.png', 'linkedin.png'],
         'contact': ['email.png', 'discord.png', 'form.png']
       }
     };
@@ -84,7 +84,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       case "about":
         return (
           <div className="flex flex-col items-center p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4">About Me</h2>
+            <h2 className="text-xl font-bold mb-4">ABOUT ME</h2>
             <p className="text-center mb-6 max-w-md">
               Hello! I'm a passionate digital artist specializing in multiple art styles and mediums.
               With a background in both traditional and digital art, I create everything from illustrations 
@@ -100,7 +100,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   target.parentElement!.innerHTML = `
-                    <div class="w-48 h-48 flex items-center justify-center bg-[#000000] border-4 border-[#6D6DD0]">
+                    <div class="w-48 h-48 flex items-center justify-center bg-[#000000] border-2 border-[#6D6DD0]">
                       <p class="text-sm text-center p-2">Profile Image Placeholder</p>
                     </div>
                   `;
@@ -119,7 +119,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       case "skills":
         return (
           <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">My Skills</h2>
+            <h2 className="text-xl font-bold mb-4 text-center">MY SKILLS</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {skills.map((skill, index) => (
                 <div 
@@ -152,7 +152,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       case "programs":
         return (
           <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Programs I Use</h2>
+            <h2 className="text-xl font-bold mb-4 text-center">PROGRAMS I USE</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {programs.map((program, index) => (
                 <div 
@@ -185,8 +185,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       case "work-experience":
         return (
           <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Work Experience</h2>
-            
+            <h2 className="text-xl font-bold mb-4 text-center">MY WORK EXPERIENCE</h2>
             {[
               {
                 company: "Creative Studio X",
@@ -225,16 +224,16 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       case "socials":
         return (
           <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Connect With Me</h2>
+            <h2 className="text-xl font-bold mb-4 text-center">MY SOCIALS</h2>
             
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {[
-                { name: "Instagram", link: "https://instagram.com/username" },
-                { name: "Artstation", link: "https://artstation.com/username" },
-                { name: "Twitter", link: "https://twitter.com/username" },
-                { name: "Deviantart", link: "https://deviantart.com/username" },
-                { name: "Behance", link: "https://behance.net/username" },
-                { name: "LinkedIn", link: "https://linkedin.com/in/username" }
+                { name: "YouTube (i)", link: "https://www.youtube.com/@Lillulette/" },
+                { name: "X / Twitter (i)", link: "https://x.com/lillulette/" },
+                { name: "Itch.io", link: "https://lillulette.itch.io/" },
+                { name: "GitHub", link: "https://github.com/lidyagercek/" },
+                { name: "Art Instagram (i)", link: "https://instagram.com/lillulette/" },
+                { name: "Tattoo Instagram", link: "https://instagram.com/lillulettoo/" }
               ].map((social, index) => (
                 <a 
                   key={index} 
@@ -256,7 +255,7 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       case "contact":
         return (
           <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-6 text-center">Contact Me</h2>
+            <h2 className="text-xl font-bold mb-6 text-center">SEND ME A MESSAGE!</h2>
             
             <form 
               className="max-w-md mx-auto"

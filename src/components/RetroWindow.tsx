@@ -354,7 +354,7 @@ export function RetroWindow({
               onClick={() => setActiveCategory(category)}
               className={cn(
                 "px-2 py-1 text-xs mr-1 text-[#6D6DD0] font-minecraft flex items-center leading-none ",
-                activeCategory === category && "bg-[#000000] border-t-1 border-l-1 border-[#6D6DD0] border-r-1 border-b-1 border-[#6D6DD0] shadow-[inset_-2px_-2px_0_#6D6DD0,inset_2px_2px_0_#6D6DD0]"
+                activeCategory === category && "bg-[#000000] border-t-1 border-l-1 border-[#6D6DD0] border-r-1 border-b-1 border-[#6D6DD0]"
               )}
             >
               {category.length > 0 ? (
@@ -369,7 +369,7 @@ export function RetroWindow({
       )}
 
       {/* Content Area */}
-      <div className="flex-1 overflow-hidden border-t-1 border-l-1 border-[#6D6DD0] bg-[#000000] shadow-[inset_2px_2px_0_#6D6DD0] font-minecraft">
+      <div className="flex-1 overflow-hidden border-t-1 border-l-1 border-[#6D6DD0] bg-[#000000] font-minecraft">
         {folderType === "about-me" ? (
           <AboutContent subcategory={activeCategory ? getFolderName(activeCategory) : ""} />
         ) : activeCategory ? (
@@ -392,40 +392,40 @@ export function RetroWindow({
         <>
           {/* Right edge - exclude top 30px to avoid interfering with title bar buttons */}
           <div 
-            className="absolute right-0 top-[30px] bottom-0 w-10 cursor-ew-resize"
-            style={{ right: '-5px' }}
+            className="absolute right-0 top-[30px] bottom-0 w-7 cursor-ew-resize"
+            style={{ right: '-17px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "e")}
           ></div>
           <div 
-            className="absolute left-0 right-0 bottom-0 h-10 cursor-ns-resize"
-            style={{ bottom: '-5px' }}
+            className="absolute left-0 right-0 bottom-0 h-7 cursor-ns-resize"
+            style={{ bottom: '-17px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "s")}
           ></div>
           <div 
-            className="absolute right-0 bottom-0 w-16 h-16 cursor-nwse-resize"
-            style={{ right: '-5px', bottom: '-5px' }}
+            className="absolute right-0 bottom-0 w-12 h-12 cursor-nwse-resize"
+            style={{ right: '-17px', bottom: '-17px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "se")}
           ></div>
           <div 
-            className="absolute left-0 top-0 bottom-0 w-10 cursor-ew-resize"
-            style={{ left: '-5px' }}
+            className="absolute left-0 top-0 bottom-0 w-7 cursor-ew-resize"
+            style={{ left: '-17px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "w")}
           ></div>
           <div 
-            className="absolute left-[30px] right-[30px] top-0 h-10 cursor-ns-resize"
-            style={{ top: '-5px' }}
+            className="absolute left-[30px] right-[30px] top-0 h-7 cursor-ns-resize"
+            style={{ top: '-17px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "n")}
           ></div>
           <div 
-            className="absolute left-0 bottom-0 w-16 h-16 cursor-nesw-resize"
-            style={{ left: '-5px', bottom: '-5px' }}
+            className="absolute left-0 bottom-0 w-12 h-12 cursor-nesw-resize"
+            style={{ left: '-17px', bottom: '-17px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "sw")}
           ></div>
           {/* Skip top-right corner completely to avoid interfering with close button */}
           {/* Only have resize handle on the far corner, away from buttons */}
           <div 
-            className="absolute left-0 top-0 w-16 h-16 cursor-nwse-resize"
-            style={{ left: '-5px', top: '-5px' }}
+            className="absolute left-0 top-0 w-12 h-12 cursor-nwse-resize"
+            style={{ left: '-17px', top: '-17px' }}
             onMouseDown={(e) => handleResizeMouseDown(e, "nw")}
           ></div>
         </>
