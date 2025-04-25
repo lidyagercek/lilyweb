@@ -17,7 +17,6 @@ const formatName = (name: string): string => {
 export function AboutContent({ subcategory }: AboutContentProps) {
   console.log("Rendering AboutContent with subcategory:", subcategory);
   
-<<<<<<< Updated upstream
   // Return the appropriate content based on subcategory
   if (subcategory === "about") {
     return (
@@ -41,49 +40,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       </div>
     );
   }
-=======
-  // Log the subcategory to help debug
-  useEffect(() => {
-    console.log("AboutContent received subcategory:", subcategory);
-  }, [subcategory]);
-  
-  const [socials, setSocials] = useState<{ link: string, name: string, image: string }[]>([]);
-  
-  // Function to load skills and programs data
-  useEffect(() => {
-    // This mimics the functionality in Gallery.tsx fetchActualImages
-    const knownImages: Record<string, Record<string, string[]>> = {
-      'about-me': {
-        'about': ['profile.jpg', 'bio.txt', 'introduction.png'],
-        'skills': ['digital-painting.png', 'character-design.png', 'concept-art.png', 'pixel-art.png', 'animation.png', '3d-modeling.png'],
-        'programs': ['photoshop.png', 'illustrator.png', 'blender.png', 'procreate.png', 'after-effects.png', 'clip-studio.png'],
-        'work-experience': ['resume.pdf', 'portfolio.jpg', 'achievements.png'],
-        'socials': ['instagram.png', 'artstation.png', 'twitter.png', 'deviantart.png', 'behance.png', 'linkedin.png'],
-        'contact': ['email.png', 'discord.png', 'form.png']
-      }
-    };
-    
-    // Set skills with name and image properties
-    setSkills(knownImages['about-me']['skills'] || []);
-    
-    // Create program objects with name and image properties
-    setPrograms((knownImages['about-me']['programs'] || []).map(image => ({
-      name: formatImageName(image),
-      image: image
-    })));
-
-    // Create social media objects with link, name and image properties
-    setSocials((knownImages['about-me']['socials'] || []).map(image => {
-      const name = formatImageName(image);
-      const platform = name.toLowerCase();
-      return {
-        link: `https://${platform}.com/username`,
-        name: name,
-        image: image
-      };
-    }));
-  }, []);
->>>>>>> Stashed changes
   
   // Skills & Programs (all variations)
   if (subcategory === "skills" || subcategory === "programs" || subcategory === "skills-&-programs") {
@@ -110,7 +66,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
       <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
         <h2 className="text-xl font-bold mb-4 text-center">Skills & Programs</h2>
         
-<<<<<<< Updated upstream
         {/* Skills Section */}
         <div className="mb-8">
           <h3 className="text-lg font-bold mb-3 border-b-2 border-[#6D6DD0] pb-1">My Skills</h3>
@@ -123,99 +78,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
           
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {skills.map((skill, index) => (
-=======
-      case "skills":
-        return (
-          <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">My Skills</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {skills.map((skill, index) => (
-                <div 
-                  key={index}
-                  className="p-2 flex flex-col items-center"
-                >
-                  <div className="w-16 h-16 mb-1 flex items-center justify-center">
-                    <img 
-                      src={`/images/about-me/skills/${skill}`} 
-                      alt={formatImageName(skill)}
-                      className="max-w-full max-h-full"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = `
-                          <div class="w-16 h-16 flex items-center justify-center bg-[#000000]">
-                            <p class="text-xs text-center">${formatImageName(skill)}</p>
-                          </div>
-                        `;
-                      }}
-                    />
-                  </div>
-                  <span>{formatImageName(skill)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-        
-      case "programs":
-        return (
-          <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Programs I Use</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {programs.map((program, index) => (
-                <div 
-                  key={index}
-                  className="p-2 flex flex-col items-center"
-                >
-                  <div className="w-16 h-16 mb-1 flex items-center justify-center">
-                    <img 
-                      src={`/images/about-me/programs/${program.image}`} 
-                      alt={program.name}
-                      className="max-w-full max-h-full"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = `
-                          <div class="w-16 h-16 flex items-center justify-center bg-[#000000]">
-                            <p class="text-xs text-center">${program.name}</p>
-                          </div>
-                        `;
-                      }}
-                    />
-                  </div>
-                  <span>{program.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-        
-      case "work-experience":
-        return (
-          <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Work Experience</h2>
-            
-            {[
-              {
-                company: "Creative Studio X",
-                position: "Senior Digital Artist",
-                period: "2020 - Present",
-                description: "Lead artist for various client projects including character design, concept art, and promotional materials."
-              },
-              {
-                company: "Game Developer Y",
-                position: "Character Artist",
-                period: "2018 - 2020",
-                description: "Designed and created game characters, environments, and assets for multiple game projects."
-              },
-              {
-                company: "Animation Studio Z",
-                position: "Illustrator & Animator",
-                period: "2016 - 2018",
-                description: "Collaborated on animated short films, created storyboards, and designed characters."
-              }
-            ].map((job, index) => (
->>>>>>> Stashed changes
               <div 
                 key={`skill-${index}`}
                 className="p-3 text-center hover:bg-[#16164D] transition-colors"
@@ -226,7 +88,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
           </div>
         </div>
         
-<<<<<<< Updated upstream
         {/* Programs Section */}
         <div>
           <h3 className="text-lg font-bold mb-3 border-b-2 border-[#6D6DD0] pb-1">Software I Use</h3>
@@ -241,121 +102,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
               <div 
                 key={`program-${index}`}
                 className="p-3 flex flex-col items-center"
-=======
-      case "socials":
-        return (
-          <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-4 text-center">Connect With Me</h2>
-            
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {socials.map((social, index) => (
-                <a 
-                  key={index} 
-                  href={social.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 flex flex-col items-center"
-                >
-                  <div className="w-16 h-16 mb-1 flex items-center justify-center">
-                    <img 
-                      src={`/images/about-me/socials/${social.image}`} 
-                      alt={social.name}
-                      className="max-w-full max-h-full"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        target.parentElement!.innerHTML = `
-                          <div class="w-16 h-16 flex items-center justify-center bg-[#000000]">
-                            <p class="text-xs text-center">${social.name}</p>
-                          </div>
-                        `;
-                      }}
-                    />
-                  </div>
-                  <span>{social.name}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        );
-        
-      case "contact":
-        return (
-          <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
-            <h2 className="text-xl font-bold mb-6 text-center">Contact Me</h2>
-            
-            <form 
-              className="max-w-md mx-auto"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const name = formData.get('name') as string;
-                const email = formData.get('email') as string;
-                const subject = formData.get('subject') as string;
-                const message = formData.get('message') as string;
-                
-                // In a real app, you would send this data to your server or email service
-                console.log('Form submitted:', { name, email, subject, message });
-                
-                // For demonstration purposes, show an alert
-                alert(`Thank you, ${name}! Your message has been sent.`);
-                
-                // Reset the form
-                e.currentTarget.reset();
-              }}
-            >
-              <div className="mb-4">
-                <label htmlFor="name" className="block mb-1">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full bg-[#000000] border-2 border-[#6D6DD0] p-2 text-[#6D6DD0] focus:outline-none focus:ring-2 focus:ring-[#8080ED]"
-                  placeholder="Your Name"
-                  required
-                />
-              </div>
-              
-              <div className="mb-4">
-                <label htmlFor="email" className="block mb-1">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full bg-[#000000] border-2 border-[#6D6DD0] p-2 text-[#6D6DD0] focus:outline-none focus:ring-2 focus:ring-[#8080ED]"
-                  placeholder="your.email@example.com"
-                  required
-                />
-              </div>
-              
-              <div className="mb-4">
-                <label htmlFor="subject" className="block mb-1">Subject</label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  className="w-full bg-[#000000] border-2 border-[#6D6DD0] p-2 text-[#6D6DD0] focus:outline-none focus:ring-2 focus:ring-[#8080ED]"
-                  placeholder="Message Subject"
-                  required
-                />
-              </div>
-              
-              <div className="mb-6">
-                <label htmlFor="message" className="block mb-1">Message</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  className="w-full bg-[#000000] border-2 border-[#6D6DD0] p-2 text-[#6D6DD0] focus:outline-none focus:ring-2 focus:ring-[#8080ED]"
-                  placeholder="Your message..."
-                  required
-                ></textarea>
-              </div>
-              
-              <button
-                type="submit"
-                className="w-full bg-[#6D6DD0] text-[#000000] p-2 font-bold hover:bg-[#8080ED] transition-colors"
->>>>>>> Stashed changes
               >
                 <div className="w-16 h-16 mb-2 flex items-center justify-center bg-[#000000] border border-[#6D6DD0]">
                   <span className="text-center text-sm">{program}</span>
