@@ -324,7 +324,7 @@ export default function App() {
         {activeWindows.includes("about-me") && !minimizedWindows.includes("about-me") && (
           <RetroWindow 
             title="About Me" 
-            categories={["About", "Skills & Programs", "Work Experience", "Contact"]}
+            categories={["About", "Skills", "Programs", "Work Experience", "Socials", "Contact"]}
             onClose={() => closeWindow("about-me")}
             onMinimize={() => minimizeWindow("about-me")}
             onMaximize={() => maximizeWindow("about-me")}
