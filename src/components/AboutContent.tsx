@@ -86,21 +86,19 @@ export function AboutContent({ subcategory }: AboutContentProps) {
           <div className="flex flex-col items-center p-6 text-[#6D6DD0] overflow-y-auto h-full">
             <h2 className="text-xl font-bold mb-4">ABOUT ME</h2>
             <p className="text-center mb-6 max-w-md">
-              Hello! I'm a passionate digital artist specializing in multiple art styles and mediums.
-              With a background in both traditional and digital art, I create everything from illustrations 
-              to 3D models and animations.
+            I am a versatile (mostly) 2D artist with Far Eastern and Anime aesthetics, both in digital and traditional works, following the trends of the said inspirations. I also can do 3D modelling and pixel art, with a little bit of knowledge in the software part.
             </p>
             
             <div className="mb-6">
               <img 
-                src="/images/about-me/about/profile.jpg" 
+                src="/images/about-me/about/profile.png" 
                 alt="Profile" 
                 className="w-48 h-48 object-cover border-4 border-[#6D6DD0]"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   target.parentElement!.innerHTML = `
-                    <div class="w-48 h-48 flex items-center justify-center bg-[#000000] border-2 border-[#6D6DD0]">
+                    <div class="w-50 h-50 flex items-center justify-center bg-[#000000] border-2 border-[#6D6DD0]">
                       <p class="text-sm text-center p-2">Profile Image Placeholder</p>
                     </div>
                   `;
@@ -109,10 +107,24 @@ export function AboutContent({ subcategory }: AboutContentProps) {
             </div>
             
             <p className="text-center max-w-md">
-              My art journey began when I was young, and I've since developed my skills across multiple
-              disciplines. I'm constantly exploring new techniques and pushing my creative boundaries.
-              Feel free to explore my portfolio to see my range of work!
-            </p>
+  My career in the game industry started when I was 17. My first job experience was at a mobile FPS game studio, where I got to learn more about the jobs in the game industry.  
+  <br /><br />
+  I designed UIs and placed them in Unity, created social media posts, reskinned UIs and social media accounts for specific events, worked on illustrations using Photoshop, bug tested our game before the QA team, managed the reviews of our game while taking notes of bugs and issues with a priority list, and even acted as a support agent for some players.
+  <br /><br />
+  Then I took a break and got into Istanbul Aydin University as a Cartoon & Animation student by getting a full scholarship on the talent exam. I studied and practiced to better my skills.  
+  <br /><br />
+  During that time I learned Live2D on the side and started doing commissions, where I made over 25 VTuber models and a few animations with dynamic physics and high motion range.  
+  <br /><br />
+  When the internship term started, I worked on Cultic Games' game <i>"Cats and the Other Lives"</i> as a pixel artist / animator using Aseprite. In the next internship term, I modeled assets in Blender for a hotel’s realistic room preview job at a small studio in my university's incubation center.  
+  <br /><br />
+  As for my graduation project, I made a copy of the game <i>"Vampire Survivors"</i> with my own assets and code using Aseprite and Unity.
+  <br /><br />
+  In 2022, I started working at a startup indie game company that made hypercasual mobile games. It was a role I got through a strong recommendation from one of my teachers.  
+  <br /><br />
+  I used Blender to make low-poly models for the hypercasual games and hand-painted them for a unique stylized look. I also did UI design and Live2D animations there for some of our games.
+  <br /><br />
+  I took Japanese classes for 2 years during this time. Therefore, I speak Turkish, English and a little bit of Japanese.
+</p>
           </div>
         );
         
@@ -188,22 +200,51 @@ export function AboutContent({ subcategory }: AboutContentProps) {
             <h2 className="text-xl font-bold mb-4 text-center">MY WORK EXPERIENCE</h2>
             {[
               {
-                company: "Creative Studio X",
-                position: "Senior Digital Artist",
-                period: "2020 - Present",
-                description: "Lead artist for various client projects including character design, concept art, and promotional materials."
+                company: "Project Flying Cat",
+                position: "Artist",
+                period: "Jan 2022 - Jul 2022",
+                description: (
+                  <>
+                    <p>■ Modeled, hand textured, and animated optimized low to mid poly 3D models for mobile hypercasual games using Blender and Adobe Photoshop.</p>
+                    <p>■ Designed, illustrated, and animated 2D characters using Adobe Photoshop and Live2D Cubism.</p>
+                    <p>■ Designed and created UI assets using Adobe Photoshop.</p>
+                  </>
+                )
               },
               {
-                company: "Game Developer Y",
-                position: "Character Artist",
-                period: "2018 - 2020",
-                description: "Designed and created game characters, environments, and assets for multiple game projects."
+                company: "Cultic Games",
+                position: "Intern Artist",
+                period: "Oct 2021 - Nov 2021",
+                description: (
+                  <>
+                    <p>■ Created assets and character animations in pixel art style for the game <i>Cats and the Other Lives</i> using Aseprite.</p>
+                  </>
+                )
               },
               {
-                company: "Animation Studio Z",
-                position: "Illustrator & Animator",
-                period: "2016 - 2018",
-                description: "Collaborated on animated short films, created storyboards, and designed characters."
+                company: "Fiverr",
+                position: "Freelancer",
+                period: "Oct 2020 - Dec 2021",
+                description: (
+                  <>
+                    <p>■ Created over 25 VTuber models, each characterized by highly expressive facial features, a wide range of motion, numerous key toggles, and animations.</p>
+                    <p>■ Illustrated models for rigging in Clip Studio Paint and rigged them for face tracking with dynamic physics using Live2D Cubism.</p>
+                  </>
+                )
+              },
+              {
+                company: "Vertigo Games OU",
+                position: "Intern",
+                period: "Jun 2018 - Feb 2019",
+                description: (
+                  <>
+                    <p>■ Managed player inquiries through support emails and responded to game reviews.</p>
+                    <p>■ Conducted analytics on player satisfaction, requests, and bugs.</p>
+                    <p>■ Handled community management by creating posts and images to promote games on social media.</p>
+                    <p>■ Designed and created UI assets using Adobe Photoshop and implemented them in Unity.</p>
+                    <p>■ Conducted thorough game testing on various devices to ensure readiness for QA testing.</p>
+                  </>
+                )
               }
             ].map((job, index) => (
               <div 
