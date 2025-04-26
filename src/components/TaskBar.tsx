@@ -158,7 +158,7 @@ export function TaskBar({
           ref={startButtonRef}
           className={cn(
             "h-8 px-2 flex items-center justify-center mr-1 font-bold text-sm border-[#6D6DD0] bg-[#000000] text-[#6D6DD0]",
-            isStartMenuOpen && "bg-[#6D6DD0]/20"
+            isStartMenuOpen && ""
           )}
           onClick={handleStartClick}
         >
@@ -182,7 +182,7 @@ export function TaskBar({
             }}
           />
           <div className="flex items-center h-full">
-            <div className="px-2 font-bold text-[#6D6DD0] bg-[#000000] border-t-1 border-l-1 border-r-1 border-[#6D6DD0] rounded-t-sm h-full flex items-center">
+            <div className="px-2 font-bold text-[#6D6DD0] border-t-1 border-l-1 border-r-1 border-[#6D6DD0] rounded-t-sm h-full flex items-center">
               <span className="font-minecraft flex items-center leading-none mt-0.5">START</span>
             </div>
           </div>

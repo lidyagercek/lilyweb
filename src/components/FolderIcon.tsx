@@ -28,7 +28,7 @@ export function FolderIcon({
       {/* Win95 folder icon with smaller purple glow */}
       <div className={cn(
         "relative w-24 h-22 flex items-center justify-center",
-        selected && "after:absolute after:inset-3 after:bg-[#6D6DD0]/10 after:blur-sm after:rounded-md"
+        selected && ""
       )}>
         {iconPath ? (
           // Use custom icon if provided
