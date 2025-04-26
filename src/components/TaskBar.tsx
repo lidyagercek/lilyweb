@@ -227,51 +227,18 @@ export function TaskBar({
 
       {/* System Tray with Icons and Time */}
       <div className="flex items-center gap-2 px-2">
-        {/* System Icons */}
-        <div className="flex items-center gap-1">
-          <button className="w-5 h-5 flex items-center justify-center">
-            <img 
-              src="/images/icons/icon1.png" 
-              alt="Icon 1"
-              className="w-4 h-4"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          </button>
-          <button className="w-5 h-5 flex items-center justify-center">
-            <img 
-              src="/images/icons/icon2.png" 
-              alt="Icon 2"
-              className="w-4 h-4"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          </button>
-          <button className="w-5 h-5 flex items-center justify-center">
-            <img 
-              src="/images/icons/icon3.png" 
-              alt="Icon 3"
-              className="w-4 h-4"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          </button>
-        </div>
+        {/* System Icons - removed */}
         
         {/* Divider */}
         <div className="w-px h-6 bg-[#6D6DD0]/50"></div>
         
         {/* Time */}
-        <div className="text-[#6D6DD0] font-minecraft text-xs font-bold">
+        <div className="text-[#6D6DD0] font-minecraft text-xs font-bold ml-2 mx-1">
           {currentTime}
         </div>
         
         {/* Show Desktop area */}
         <div className="w-px h-6 bg-[#6D6DD0]/50 ml-1"></div>
-        <div className="w-3 h-8 cursor-pointer" title="Show Desktop"></div>
       </div>
 
       {/* Context Menu */}

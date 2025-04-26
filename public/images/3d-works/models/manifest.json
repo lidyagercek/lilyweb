@@ -1,0 +1,23 @@
+{
+  "files": [
+    "aghanim_female.jpg",
+    "aghanim_male.jpg",
+    "face_front.png",
+    "face_front_mesh.png",
+    "face_side.png",
+    "face_side_mesh.png",
+    "female_base_b.png",
+    "female_base_f.png",
+    "female_base_mesh.png",
+    "female_base_s.png",
+    "male_base_b.png",
+    "male_base_f.png",
+    "male_base_s.png",
+    "objects_01.png",
+    "objects_02.png",
+    "room_closed.png",
+    "room_closed_mesh.png",
+    "room_open.png",
+    "room_open_mesh.png"
+  ]
+} 

@@ -3,7 +3,6 @@ import { FolderIcon } from "./components/FolderIcon";
 import { RetroWindow } from "./components/RetroWindow";
 import { TaskBar } from "./components/TaskBar";
 import { BootSequence } from "./components/BootSequence";
-import { WelcomeNotification } from "./components/WelcomeNotification";
 import { StartMenu } from "./components/StartMenu";
 import "./index.css"
 
@@ -17,7 +16,6 @@ export default function App() {
   const [topZIndex, setTopZIndex] = useState(10);
   const [wallpaper, setWallpaper] = useState<string | null>(null);
   const [booting, setBooting] = useState(true);
-  const [showWelcomeNotification, setShowWelcomeNotification] = useState(false);
 
   const startMenuRef = useRef<HTMLDivElement>(null);
   const startButtonRef = useRef<HTMLButtonElement>(null);
@@ -54,14 +52,6 @@ export default function App() {
   // Function to handle boot sequence completion
   const handleBootComplete = () => {
     setBooting(false);
-    setTimeout(() => {
-      setShowWelcomeNotification(true);
-    }, 2000);
-  };
-
-  // Function to handle welcome notification close
-  const handleWelcomeClose = () => {
-    setShowWelcomeNotification(false);
   };
 
   // Function to handle window click (to bring it to front)
@@ -330,7 +320,7 @@ export default function App() {
         {activeWindows.includes("tattoos") && !minimizedWindows.includes("tattoos") && (
           <RetroWindow 
             title="Tattoo Designs" 
-            categories={["Tattoos", "Available Designs", "Fake Skins"]}
+            categories={["Tattoos", "Flashes", "Fake Skins"]}
             onClose={() => closeWindow("tattoos")}
             onMinimize={() => minimizeWindow("tattoos")}
             onMaximize={() => maximizeWindow("tattoos")}
@@ -394,11 +384,6 @@ export default function App() {
         openStartMenu={toggleStartMenu}
         isStartMenuOpen={isStartMenuOpen}
       />
-      
-      {/* Welcome Notification */}
-      {showWelcomeNotification && (
-        <WelcomeNotification onClose={handleWelcomeClose} />
-      )}
     </div>
   )
 }

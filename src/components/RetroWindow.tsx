@@ -235,7 +235,91 @@ export function RetroWindow({
 
   // Convert category name to folder name (lowercase, replace spaces with hyphens)
   const getFolderName = (cat: string) => {
-    return cat.toLowerCase().replace(/\s+/g, '-');
+    console.log(`[RetroWindow Debug] getFolderName input: "${cat}"`);
+    
+    // Handle special case for "Character/Concept Designs"
+    if (cat.toLowerCase() === "character/concept designs") {
+      console.log(`[RetroWindow Debug] Matched special case for character-concept-designs`);
+      return "character-concept-designs";
+    }
+    
+    // Handle multi-level subcategories with slashes
+    if (cat.includes("/")) {
+      const result = cat.toLowerCase().replace(/\//g, "-").replace(/\s+/g, "-");
+      console.log(`[RetroWindow Debug] Processed slash-containing name to: "${result}"`);
+      return result;
+    }
+    
+    // Handle special case categories (exact matches only)
+    const specialCases: Record<string, string> = {
+      // 2D arts subcategories
+      "illustrations": "illustrations",
+      "Illustrations": "illustrations",
+      "sketches": "sketches",
+      "Sketches": "sketches",
+      "casual arts": "casual-arts",
+      "Casual Arts": "casual-arts",
+      "traditional": "traditional",
+      "Traditional": "traditional",
+      
+      // 3D works subcategories
+      "renders": "renders",
+      "Renders": "renders",
+      "models": "models",
+      "Models": "models",
+      
+      // Animation subcategories
+      "live2d": "live2d",
+      "Live2D": "live2d",
+      "2d animations": "2d-animations",
+      "2D Animations": "2d-animations",
+      "pixel animations": "pixel-animations",
+      "Pixel Animations": "pixel-animations",
+      "3d animations": "3d-animations",
+      "3D Animations": "3d-animations",
+      
+      // About me subcategories
+      "about": "about",
+      "About": "about",
+      "skills": "skills",
+      "Skills": "skills",
+      "programs": "programs",
+      "Programs": "programs",
+      "work experience": "work-experience",
+      "Work Experience": "work-experience",
+      "socials": "socials",
+      "Socials": "socials",
+      "contact": "contact",
+      "Contact": "contact",
+      
+      // Tattoo subcategories
+      "tattoos subcategory": "tattoo",
+      "Tattoos subcategory": "tattoo",
+      "flashes": "flashes",
+      "Flashes": "flashes",
+      "fake skins": "fake-skin",
+      "Fake Skins": "fake-skin",
+      
+      // Folder types
+      "2d-arts": "2d-arts",
+      "3d-works": "3d-works",
+      "pixel-arts": "pixel-arts",
+      "animations": "animations",
+      "about-me": "about-me",
+      "tattoos": "tattoos",
+      "wallpapers": "wallpapers"
+    };
+    
+    // Check if we have a special case mapping
+    if (specialCases[cat]) {
+      console.log(`[RetroWindow Debug] Matched special case: "${cat}" -> "${specialCases[cat]}"`);
+      return specialCases[cat];
+    }
+    
+    // Default: convert to lowercase and replace spaces with hyphens
+    const result = cat.toLowerCase().replace(/\s+/g, '-');
+    console.log(`[RetroWindow Debug] Default processing: "${cat}" -> "${result}"`);
+    return result;
   };
   
   // Handle maximize/restore

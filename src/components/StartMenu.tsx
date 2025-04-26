@@ -70,7 +70,7 @@ export function StartMenu({
     >
       {/* User profile banner */}
       <div className="flex items-center bg-[#252547] border-b-2 border-[#6D6DD0] p-2">
-        <div className="w-12 h-12 rounded overflow-hidden bg-[#6D6DD0] mr-2">
+        <div className="w-12 h-12 overflow-hidden bg-[#6D6DD0] mr-2">
           <img
             src="/images/about-me/about/profile.png"
             alt="User"
