@@ -1,30 +1,7 @@
-# Cache JPG and JPEG
-/images/*.jpg
+# Cache all image types recursively inside /images/ and its subfolders
+
+/images/*.{jpg,jpeg,png,gif,webp,svg,ico,bmp}
   Cache-Control: public, max-age=31536000, immutable
 
-/images/*.jpeg
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache PNG
-/images/*.png
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache GIF
-/images/*.gif
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache WebP
-/images/*.webp
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache SVG
-/images/*.svg
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache ICO
-/images/*.ico
-  Cache-Control: public, max-age=31536000, immutable
-
-# Cache BMP
-/images/*.bmp
+/images/**/*.{jpg,jpeg,png,gif,webp,svg,ico,bmp}
   Cache-Control: public, max-age=31536000, immutable
