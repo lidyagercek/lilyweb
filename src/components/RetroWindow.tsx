@@ -438,7 +438,7 @@ export function RetroWindow({
               onClick={() => setActiveCategory(category)}
               className={cn(
                 "px-2 py-1 text-xs mr-1 text-[#6D6DD0] font-minecraft flex items-center leading-none ",
-                activeCategory === category && "bg-[#000000] border-t-1 border-l-1 border-[#6D6DD0] border-r-1 border-b-1 border-[#6D6DD0]"
+                activeCategory === category && "bg-[#000000] border-[#6D6DD0] border-2 border-[#6D6DD0]"
               )}
             >
               {category.length > 0 ? (
