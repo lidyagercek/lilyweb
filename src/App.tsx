@@ -20,7 +20,6 @@ export default function App() {
   const startMenuRef = useRef<HTMLDivElement>(null);
   const startButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Function to bring a window to the front
   const bringToFront = (windowId: string) => {
     const newZIndex = topZIndex + 1;
     setWindowZIndices(prev => ({

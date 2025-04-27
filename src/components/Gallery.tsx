@@ -19,7 +19,65 @@ const getPublicImageUrl = (path: string): string => {
   return `${import.meta.env.BASE_URL || '/'}${path}`;
 };
 
-// Direct approach to scan a directory using file system module
+// Images cache to store preloaded images
+const imageCache: Record<string, string[]> = {};
+
+// Preload images using Vite's import.meta.glob during the boot phase
+const preloadImageDirectories = () => {
+  // Use import.meta.glob to get all image files
+  // During build time, Vite will statically analyze this pattern and include all matching files
+  // The pattern should match the structure in the public directory
+  // Using '/images/**/*' matches what would be available at runtime (after public directory is copied to root)
+  const imageModules = import.meta.glob('/images/**/*.{jpg,jpeg,png,gif,webp,svg,bmp,ico}', { 
+    eager: true, // Load all matches immediately rather than on-demand
+    as: 'url'    // Get the public URL of each asset
+  });
+
+  // Process the loaded modules to organize them by directory
+  Object.entries(imageModules).forEach(([path, url]) => {
+    // Extract directories from path: /images/category/subcategory/file.jpg
+    const relativePath = path.replace('/images/', '');
+    const pathParts = relativePath.split('/');
+    
+    // Handle files at different directory depths
+    if (pathParts.length >= 2) {
+      const category = pathParts[0];
+      const subcategory = pathParts.length > 2 ? pathParts[1] : '';
+      const fileName = pathParts[pathParts.length - 1];
+      
+      // Create directory key - either category or category/subcategory
+      const dirKey = subcategory ? `${category}/${subcategory}` : category;
+      
+      // Initialize array for this directory if not exists
+      if (!imageCache[dirKey]) {
+        imageCache[dirKey] = [];
+      }
+      
+      // Add the file to the cache
+      if (!imageCache[dirKey].includes(fileName)) {
+        imageCache[dirKey].push(fileName);
+      }
+    }
+  });
+  
+  console.log('[Gallery] Preloaded image directories:', Object.keys(imageCache));
+  return imageCache;
+};
+
+// Preload images during module initialization
+preloadImageDirectories();
+
+// Helper function to check if image cache is ready - can be called during app initialization
+export const isImageCacheReady = (): boolean => {
+  return Object.keys(imageCache).length > 0;
+};
+
+// Export the imageCache for potential use in other components
+export const getImageCache = (): Record<string, string[]> => {
+  return {...imageCache};
+};
+
+// Direct approach to scan a directory using file system module or cached images
 const scanDirectoryForImages = async (directoryPath: string, subDir?: string): Promise<string[]> => {
   try {
     // Build the path to scan
@@ -27,7 +85,6 @@ const scanDirectoryForImages = async (directoryPath: string, subDir?: string): P
     if (subDir) {
       basePath = `${directoryPath}/${subDir}`;
     }
-    
     
     // Attempt 1: Try to use manifest.json if available
     try {
@@ -66,7 +123,7 @@ const scanDirectoryForImages = async (directoryPath: string, subDir?: string): P
         }
       }
     } catch (e) {
-      console.error(`[Gallery Debug] Error scanning directory ${directoryPath}/${subDir || ''}:`, err);
+      console.error(`[Gallery Debug] Error scanning directory ${directoryPath}/${subDir || ''}:`, e);
 
     }
     
@@ -197,6 +254,21 @@ const scanDirectoryDirectly = async (basePath: string): Promise<string[]> => {
   return foundImages;
 };
 
+// Consolidated function to get images either from cache or fallback methods
+const getImageList = async (category: string, subcategory?: string): Promise<string[]> => {
+  const basePath = subcategory ? `${category}/${subcategory}` : category;
+  
+  // First, check if we have cached images for this path
+  if (imageCache[basePath] && imageCache[basePath].length > 0) {
+    console.log(`[Gallery] Using cached images for ${basePath}:`, imageCache[basePath].length);
+    return imageCache[basePath];
+  }
+  
+  // If no cached images, fall back to the original scanning methods
+  console.log(`[Gallery] No cached images for ${basePath}, falling back to scan methods`);
+  return await scanDirectoryForImages(category, subcategory);
+};
+
 export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
   const [images, setImages] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -220,9 +292,9 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
       setError(null);
       
       try {
+        // Get images using the consolidated function
+        const foundImages = await getImageList(category, subcategory);
         
-        // Get images from the correct subcategory if specified
-        const foundImages = await scanDirectoryForImages(category, subcategory);
         if (foundImages.length === 0) {
           setError(`No images found in ${category}/${subcategory || ""}`);
         }
