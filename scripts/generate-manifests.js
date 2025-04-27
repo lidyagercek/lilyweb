@@ -61,9 +61,7 @@ const generateManifest = (dir) => {
   const manifestPath = path.join(dir, 'manifest.json');
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
   
-  if (DEBUG) {
-    console.log(`✅ Generated manifest for ${path.relative(ROOT_DIR, dir)} with ${imageFiles.length} images`);
-  }
+
   
   // Process subdirectories recursively
   subdirectories.forEach(subdir => {
