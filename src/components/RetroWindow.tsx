@@ -286,8 +286,7 @@ export function RetroWindow({
       "Work Experience": "work-experience",
       "socials": "socials",
       "Socials": "socials",
-      "contact": "contact",
-      "Contact": "contact",
+
       
       // Tattoo subcategories
       "tattoos subcategory": "tattoo",

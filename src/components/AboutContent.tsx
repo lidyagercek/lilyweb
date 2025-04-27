@@ -306,7 +306,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
           </div>
         );
         
-      case "contact":
         return (
           <div className="p-6 text-[#6D6DD0] overflow-y-auto h-full">
             <h2 className="text-xl font-bold mb-6 text-center">SEND ME A MESSAGE!</h2>
