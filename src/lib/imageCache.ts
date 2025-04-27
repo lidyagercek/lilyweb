@@ -44,13 +44,11 @@ export const getPublicImageUrl = (path: string): string => {
 
 // Load manifests for known directories - no validation needed for static files
 const loadFromManifests = async (): Promise<void> => {
-  
   for (const dir of knownDirectories) {
     try {
       const { category, subcategory } = dir;
       const basePath = subcategory ? `${category}/${subcategory}` : category;
       const manifestUrl = `${import.meta.env.BASE_URL || '/'}images/${basePath}/manifest.json`;
-      
       
       const response = await fetch(manifestUrl);
       
@@ -76,11 +74,9 @@ const loadFromManifests = async (): Promise<void> => {
     }
   }
   
-  // Print debug info about loaded manifests
+  // Get stats about loaded directories
   const loadedDirs = Object.keys(imageCache);
   const emptyDirs = loadedDirs.filter(dir => imageCache[dir].length === 0);
-  const nonEmptyDirs = loadedDirs.filter(dir => imageCache[dir].length > 0);
-  
   
   if (emptyDirs.length > 0) {
     console.warn('[Image Cache] Empty directories:', emptyDirs.join(', '));
@@ -138,9 +134,6 @@ const discoverDirectories = async (): Promise<void> => {
         }
       }
     }
-    
-    // Log the final list of directories for debugging
-      knownDirectories.map(dir => dir.subcategory ? `${dir.category}/${dir.subcategory}` : dir.category).join(', '));
   } catch (error) {
     console.error('[Image Cache] Error discovering directories:', error);
   }
@@ -148,15 +141,13 @@ const discoverDirectories = async (): Promise<void> => {
 
 // Preload all image directories
 export const preloadImageDirectories = async (): Promise<Record<string, string[]>> => {
-  
   // First discover any additional directories from root manifest
   await discoverDirectories();
   
   // Then load manifests for all known directories
   await loadFromManifests();
   
-    Object.entries(imageCache).map(([dir, files]) => `${dir}: ${files.length}`).join(', '));
-  
+  // Return the cache without logging
   return imageCache;
 };
 
