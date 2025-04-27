@@ -1,50 +1,64 @@
-# Images Gallery Directory
+# Image Management
 
-This directory contains all images for the gallery. The system will scan this directory structure to display images in the gallery application.
+Images in this project are stored in the `public/images` directory and are loaded using manifest files.
 
-## Directory Structure
+## Structure
 
-- Each category should be a separate folder
-- Subcategories should be folders inside the category folders
-- Images should be placed in the appropriate category/subcategory folders
+- All images should be placed in appropriate subdirectories under `public/images/`
+- Each subdirectory can have its own subdirectories for better organization
+- Manifest files (`manifest.json`) are used to list images in each directory
 
-Example:
+## Working with Images
+
+### Adding New Images
+
+1. Place your images in the appropriate directory under `public/images/`
+2. Run `npm run generate-manifests` to update all manifest files
+3. The images will be automatically available in your application
+
+### Referencing Images in Code
+
+You can reference images using their URL path:
+
+```jsx
+// For an image in public/images/pixel-arts/game_asset.png
+<img src="/images/pixel-arts/game_asset.png" alt="Game Asset" />
 ```
-/images
-  /2d-arts
-    /illustrations
-      image1.jpg
-      image2.png
-    /sketches
-      sketch1.png
-  /3d-works
-    /models
-      model1.jpg
-```
 
-## How the Gallery Finds Images
+The images are served from the public directory, so you don't need to use import.meta.glob.
 
-The gallery uses two methods to find images:
+### Organizing Images
 
-1. **Manifest Files** (recommended): Create a `manifest.json` file in any folder to explicitly list files:
+- Create directories for different categories (e.g., `pixel-arts`, `3d-works`, etc.)
+- Create subdirectories for more specific categories
+- The manifest files will automatically track the structure
+
+## Manifest Files
+
+Manifest files are JSON files that list all images in a directory. They look like this:
 
 ```json
 {
   "files": [
-    "image1.jpg",
-    "image2.png",
-    "image3.webp"
+    "image1.png",
+    "image2.jpg",
+    "image3.gif"
+  ],
+  "subdirectories": [
+    "subdir1",
+    "subdir2"
   ]
 }
 ```
 
-2. **Dynamic Scanning**: If no manifest exists, the gallery will try to find images with common names and extensions.
+These files are generated automatically using the `npm run generate-manifests` command.
 
-## Adding New Images
+## Before Deployment
 
-1. Create the appropriate category/subcategory folders if they don't exist
-2. Add your image files to the folder
-3. Either:
-   - Add the filenames to the manifest.json file in that folder
-   - Name your files with common patterns (1.jpg, 2.png, image.jpg, etc.)
-4. Refresh the gallery page to see your images 
+Before building the project for deployment, run:
+
+```bash
+npm run generate-manifests
+```
+
+This will update all manifest files. This step is automatically included in the build process. 

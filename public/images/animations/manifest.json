@@ -1,9 +1,9 @@
 {
-  "description": "Animations directory",
+  "files": [],
   "subdirectories": [
     "2d-animations",
+    "3d-animations",
     "live2d",
-    "pixel-animations",
-    "3d-animations"
+    "pixel-animations"
   ]
-} 
+}

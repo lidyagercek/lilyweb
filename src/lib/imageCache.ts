@@ -8,9 +8,17 @@ const knownDirectories = [
   { category: 'animations', subcategory: 'pixel-animations' },
   { category: 'animations', subcategory: 'digital-animations' },
   { category: 'animations', subcategory: 'live2d' },
-  { category: 'digital-art', subcategory: 'illustrations' },
-  { category: 'digital-art', subcategory: 'pixel-art' },
-  { category: 'about-me', subcategory: 'skills' }
+  { category: '2d-arts', subcategory: 'illustrations' },
+  { category: '2d-arts', subcategory: 'sketches' },
+  { category: '2d-arts', subcategory: 'traditional' },
+  { category: 'pixel-arts', subcategory: null },
+  { category: 'tattoos', subcategory: 'tattoos' },
+  { category: 'tattoos', subcategory: 'fake-skin' },
+  { category: 'tattoos', subcategory: 'flashes' },
+  { category: 'about-me', subcategory: 'skills' },
+  { category: 'cursors', subcategory: null },
+  { category: 'icons', subcategory: null },
+  { category: 'wallpapers', subcategory: null }
 ];
 
 // Function to get the correct public URL for images
@@ -26,7 +34,7 @@ export const getPublicImageUrl = (path: string): string => {
 
 // Load manifests for known directories
 const preloadFromManifests = async (): Promise<void> => {
-  console.log('[Image Cache] Attempting to preload from manifest.json files');
+  console.log('[Image Cache] Preloading from manifest.json files');
   
   for (const dir of knownDirectories) {
     try {
@@ -66,76 +74,73 @@ const preloadFromManifests = async (): Promise<void> => {
   }
 };
 
-// Preload images using Vite's import.meta.glob
+// Discover directories from root manifest
+const discoverDirectories = async (): Promise<void> => {
+  try {
+    const rootManifestUrl = `${import.meta.env.BASE_URL || '/'}images/manifest.json`;
+    const response = await fetch(rootManifestUrl);
+    
+    if (response.ok) {
+      // The root manifest might have a list of subdirectories
+      const mainManifest = await response.json();
+      
+      if (mainManifest.subdirectories && Array.isArray(mainManifest.subdirectories)) {
+        // For each top level directory, check if it has a manifest
+        for (const category of mainManifest.subdirectories) {
+          try {
+            const categoryManifestUrl = `${import.meta.env.BASE_URL || '/'}images/${category}/manifest.json`;
+            const categoryResponse = await fetch(categoryManifestUrl);
+            
+            if (categoryResponse.ok) {
+              const categoryManifest = await categoryResponse.json();
+              
+              // If this category has subdirectories, add them to knownDirectories
+              if (categoryManifest.subdirectories && Array.isArray(categoryManifest.subdirectories)) {
+                categoryManifest.subdirectories.forEach((subcategory: string) => {
+                  // Add to knownDirectories if not already there
+                  if (!knownDirectories.some(dir => 
+                      dir.category === category && dir.subcategory === subcategory)) {
+                    knownDirectories.push({
+                      category,
+                      subcategory
+                    });
+                  }
+                });
+              }
+              
+              // Also add the main category if it has files directly
+              if (categoryManifest.files && Array.isArray(categoryManifest.files)) {
+                if (!knownDirectories.some(dir => 
+                    dir.category === category && dir.subcategory === null)) {
+                  knownDirectories.push({
+                    category,
+                    subcategory: null
+                  });
+                }
+              }
+            }
+          } catch (error) {
+            console.error(`[Image Cache] Error loading category manifest for ${category}:`, error);
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error('[Image Cache] Error discovering directories:', error);
+  }
+};
+
+// Preload all image directories
 export const preloadImageDirectories = async (): Promise<Record<string, string[]>> => {
   console.log('[Image Cache] Starting preload of image directories...');
   
-  // Try different patterns to find the right path structure
-  const patterns = [
-    // Standard pattern - looking for images in the public directory that will be at root in production
-    '/public/images/**/*.{jpg,jpeg,png,gif,webp,svg,bmp,ico}',
-    // Alternative pattern if the above doesn't work
-    '/images/**/*.{jpg,jpeg,png,gif,webp,svg,bmp,ico}',
-    // Relative pattern from the current directory
-    '../public/images/**/*.{jpg,jpeg,png,gif,webp,svg,bmp,ico}'
-  ];
+  // First discover any additional directories from root manifest
+  await discoverDirectories();
   
-  let totalImages = 0;
+  // Then load manifests for all known directories
+  await preloadFromManifests();
   
-  // Try each pattern
-    try {
-      const imageModules = import.meta.glob('../../dist/images/**/*.{jpg,jpeg,png,gif,webp,svg,bmp,ico}', { 
-        eager: true,
-        as: 'url'
-      });
-      
-      
-      if (Object.keys(imageModules).length > 0) {
-        totalImages += Object.keys(imageModules).length;
-        
-        Object.entries(imageModules).forEach(([path, url]) => {
-          // Extract path parts based on the pattern
-          let relativePath = path;
-          if (path.includes('/images/')) {
-            relativePath = path.substring(path.indexOf('/images/') + 8);
-          } else if (path.includes('/public/images/')) {
-            relativePath = path.substring(path.indexOf('/public/images/') + 15);
-          }
-          
-          console.log(`[Image Cache] Processing image: ${path} -> ${relativePath}`);
-          
-          const pathParts = relativePath.split('/');
-          
-          if (pathParts.length >= 2) {
-            const category = pathParts[0];
-            const subcategory = pathParts.length > 2 ? pathParts[1] : '';
-            const fileName = pathParts[pathParts.length - 1];
-            
-            const dirKey = subcategory ? `${category}/${subcategory}` : category;
-            
-            console.log(`[Image Cache] Categorizing as: ${dirKey}/${fileName}`);
-            
-            if (!imageCache[dirKey]) {
-              imageCache[dirKey] = [];
-            }
-            
-            if (!imageCache[dirKey].includes(fileName)) {
-              imageCache[dirKey].push(fileName);
-            }
-          }
-        });
-      }
-    } catch (error) {
-    }
-  
-  
-  // If no images found with glob patterns, try loading from manifest files
-  if (totalImages === 0) {
-    console.log('[Image Cache] No images found with glob patterns, trying manifest loading');
-    await preloadFromManifests();
-  }
-  
-  console.log(`[Image Cache] Total images found: ${totalImages}`);
+  console.log(`[Image Cache] Total directories loaded: ${Object.keys(imageCache).length}`);
   console.log('[Image Cache] Preloaded directories:', Object.keys(imageCache));
   console.log('[Image Cache] Image counts per directory:', 
     Object.entries(imageCache).map(([dir, files]) => `${dir}: ${files.length}`).join(', '));

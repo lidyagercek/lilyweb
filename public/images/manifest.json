@@ -3,6 +3,8 @@
   "usage": "You can place a manifest.json file in any subdirectory of public/images to list files",
   "example": "Place manifest.json files in each category folder to list files in that category",
   "structure": {
-    "files": ["Array of filenames in this directory"]
+    "files": [
+      "Array of filenames in this directory"
+    ]
   }
-} 
+}

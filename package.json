@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate-manifests": "node scripts/generate-manifests.js",
+    "prebuild": "npm run generate-manifests"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

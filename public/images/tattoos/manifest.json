@@ -1,8 +1,8 @@
 {
-  "description": "Tattoos directory",
+  "files": [],
   "subdirectories": [
-    "tattoo",
     "fake-skin",
-    "flashes"
+    "flashes",
+    "tattoos"
   ]
-} 
+}

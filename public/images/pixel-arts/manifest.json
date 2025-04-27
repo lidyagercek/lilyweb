@@ -1,14 +1,14 @@
 {
   "files": [
-    "bottles.png", 
-    "game_asset.png", 
+    "bottles.png",
+    "game_asset.png",
     "game_environment.png",
-    "game_ui.png", 
-    "melia_canon.png", 
+    "game_ui.png",
+    "melia_canon.png",
     "melia_traditional.png",
-    "sakura.png", 
-    "siren_01.png", 
-    "siren_02.png", 
+    "sakura.png",
+    "siren_01.png",
+    "siren_02.png",
     "succulents.png"
   ]
-} 
+}
