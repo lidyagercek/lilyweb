@@ -8,187 +8,9 @@ interface GalleryProps {
   onSelectItem?: (path: string) => void;
 }
 
-const scanDirectoryForImages = async (directoryPath: string, subDir?: string): Promise<string[]> => {
-  try {
-    let basePath = directoryPath;
-    if (subDir) {
-      basePath = `${directoryPath}/${subDir}`;
-    }
-    
-    try {
-      const manifestUrl = `${import.meta.env.BASE_URL || '/'}images/${basePath}/manifest.json`;
-      
-      const response = await fetch(manifestUrl, {
-        method: 'GET',
-        headers: { 'Cache-Control': 'no-cache' }
-      });
-      
-      
-      if (response.ok) {
-        const data = await response.json();
-        
-        if (data.files && Array.isArray(data.files)) {
-          
-          const verifiedFiles = [];
-          for (const file of data.files) {
-            const fileUrl = getPublicImageUrl(`${basePath}/${file}`);
-            
-            try {
-              const fileCheck = await fetch(fileUrl, { method: 'HEAD' });
-              if (fileCheck.ok && parseInt(fileCheck.headers.get('content-length') || '0') > 0) {
-                verifiedFiles.push(file);
-              }
-            } catch (e) {
-            }
-          }
-          
-          if (verifiedFiles.length > 0) {
-            return verifiedFiles;
-          }
-        }
-      }
-    } catch (e) {
-      console.error(`[Gallery Debug] Error scanning directory ${directoryPath}/${subDir || ''}:`, e);
-    }
-    
-    return await scanDirectoryDirectly(basePath);
-  } catch (err) {
-    return [];
-  }
-};
-
-// Directly scan a directory for all possible image files
-const scanDirectoryDirectly = async (basePath: string): Promise<string[]> => {
-  const foundImages: string[] = [];
-  
-  // Common image extensions to check
-  const extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico'];
-  const baseImageUrl = `${import.meta.env.BASE_URL || '/'}images/${basePath}/`;
-  
-  try {
-    // Attempt 1: Try to use fetch to get a directory listing (some servers support this)
-    const dirResponse = await fetch(baseImageUrl);
-    if (dirResponse.ok) {
-      const html = await dirResponse.text();
-      
-      // Look for links to image files in the directory listing
-      const regex = /href="([^"]*\.(jpg|jpeg|png|gif|webp|svg|bmp|ico))"/gi;
-      const matches = [...html.matchAll(regex)];
-      
-      if (matches && matches.length > 0) {
-        const imageFiles = matches.map(m => m[1].split('/').pop() || '').filter(Boolean);
-        return imageFiles;
-      }
-    }
-  } catch (e) {
-    console.log('Directory listing not supported by server');
-  }
-  
-  // Attempt 2: Try common filenames
-  // This includes sequential numbers (1.jpg, 2.jpg, etc) and common image names
-  const filePatterns = [
-    // Sequential numbers
-    ...Array.from({ length: 50 }, (_, i) => `${i + 1}`),
-    
-    // Common image names
-    'image', 'photo', 'artwork', 'picture', 'wallpaper', 'background',
-    'illustration', 'drawing', 'sketch', 'design', 'render', 'shot',
-    'img', 'pic', 'sample', 'cover', 'thumbnail', 'preview',
-    
-    // Try to detect files matching the category or subcategory name
-    basePath.split('/').pop() || ''
-  ];
-  
-  // Check all combinations of patterns and extensions
-  const checkPromises: Promise<string>[] = [];
-  
-  // For each pattern and extension, try to find a matching file
-  for (const pattern of filePatterns) {
-    for (const ext of extensions) {
-      const filename = `${pattern}.${ext}`;
-      
-      checkPromises.push(
-        fetch(`${baseImageUrl}${filename}`, { method: 'HEAD' })
-          .then(response => {
-            // Check if the file exists and has content
-            if (response.ok) {
-              const contentLength = parseInt(response.headers.get('content-length') || '0');
-              if (contentLength > 0) {
-                return filename;
-              }
-            }
-            throw new Error(`File ${filename} not found or empty`);
-          })
-          .catch(() => '')
-      );
-    }
-  }
-  
-  // Also check if there are any files simply named with the extensions
-  // (e.g., .jpg, .png) without a specific name
-  for (const ext of extensions) {
-    checkPromises.push(
-      fetch(`${baseImageUrl}.${ext}`, { method: 'HEAD' })
-        .then(response => response.ok ? `.${ext}` : '')
-        .catch(() => '')
-    );
-  }
-  
-  // Wait for all check requests to complete
-  const results = await Promise.all(checkPromises);
-  
-  // Filter out empty results and add valid files to the list
-  results.filter(Boolean).forEach(filename => {
-    if (!foundImages.includes(filename)) {
-      foundImages.push(filename);
-    }
-  });
-  
-  
-  // If we still haven't found any images, try one last approach - looking for any image files
-  if (foundImages.length === 0) {
-    try {
-      // Try a different approach for the last attempt
-      // Check for any files that might exist with common image patterns
-      const lastAttemptPatterns = [
-        'main', 'header', 'banner', 'logo', 'icon', 'avatar',
-        'profile', 'gallery', 'showcase', 'portfolio', 'art',
-        'work', 'project', 'example', 'demo', 'test', 'sample'
-      ];
-      
-      for (const pattern of lastAttemptPatterns) {
-        for (const ext of extensions) {
-          try {
-            const checkUrl = `${baseImageUrl}${pattern}.${ext}`;
-            const response = await fetch(checkUrl, { method: 'HEAD' });
-            if (response.ok) {
-              foundImages.push(`${pattern}.${ext}`);
-            }
-          } catch (e) {
-            // Ignore errors for this last-ditch effort
-          }
-        }
-      }
-    } catch (e) {
-      console.log('Final image scan attempt failed');
-    }
-  }
-  
-  return foundImages;
-};
-
-// Consolidated function to get images either from cache or fallback methods
-const getImageList = async (category: string, subcategory?: string): Promise<string[]> => {
-  // First check for preloaded images from the cache
-  const cachedImages = getImagesForDirectory(category, subcategory);
-  if (cachedImages.length > 0) {
-    console.log(`[Gallery] Using cached images for ${category}/${subcategory || ''}:`, cachedImages.length);
-    return cachedImages;
-  }
-  
-  // Fall back to scanning methods if cache is empty
-  console.log(`[Gallery] No cached images for ${category}/${subcategory || ''}, falling back to scan methods`);
-  return scanDirectoryForImages(category, subcategory);
+// Simple function to get images from the imageCache
+const getImageList = (category: string, subcategory?: string): string[] => {
+  return getImagesForDirectory(category, subcategory);
 };
 
 export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
@@ -214,8 +36,8 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
       setError(null);
       
       try {
-        // Get images using the consolidated function
-        const foundImages = await getImageList(category, subcategory);
+        // Get images directly from the cache - no verification needed
+        const foundImages = getImageList(category, subcategory);
         
         if (foundImages.length === 0) {
           setError(`No images found in ${category}/${subcategory || ""}`);
@@ -223,7 +45,7 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
         
         setImages(foundImages);
       } catch (error) {
-        console.error('[Gallery Debug] Error loading images:', error);
+        console.error('[Gallery] Error loading images:', error);
         setError(`Error loading images: ${error}`);
         setImages([]);
       } finally {
@@ -250,7 +72,7 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
             </p>
           </div>
         </div>
-      ) : (
+      ) :
         <>
           {/* Thumbnail grid - Flexible layout */}
           <div className="flex flex-wrap gap-4 p-3 bg-[#000000] overflow-y-auto flex-1 content-start">
@@ -364,7 +186,7 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
             </div>
           )}
         </>
-      )}
+      }
     </div>
   );
 } 

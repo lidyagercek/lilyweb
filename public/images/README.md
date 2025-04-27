@@ -25,7 +25,7 @@ You can reference images using their URL path:
 <img src="/images/pixel-arts/game_asset.png" alt="Game Asset" />
 ```
 
-The images are served from the public directory, so you don't need to use import.meta.glob.
+The images are served directly from the public directory with no additional processing.
 
 ### Organizing Images
 
@@ -52,6 +52,18 @@ Manifest files are JSON files that list all images in a directory. They look lik
 ```
 
 These files are generated automatically using the `npm run generate-manifests` command.
+
+## How It Works
+
+1. The `generate-manifests` script scans the `public/images` directory and creates a manifest.json file in each folder
+2. The application reads these manifest files to know what images are available
+3. Images are loaded directly from their paths without any validation or complex processing
+
+This approach is:
+- Fast: No dynamic scanning or validation needed
+- Reliable: Static files are listed in manifests
+- Efficient: Images can be cached by browsers
+- Simple: Direct URL references in code
 
 ## Before Deployment
 

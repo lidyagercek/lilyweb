@@ -32,9 +32,9 @@ export const getPublicImageUrl = (path: string): string => {
   return `${import.meta.env.BASE_URL || '/'}${path}`;
 };
 
-// Load manifests for known directories
-const preloadFromManifests = async (): Promise<void> => {
-  console.log('[Image Cache] Preloading from manifest.json files');
+// Load manifests for known directories - no validation needed for static files
+const loadFromManifests = async (): Promise<void> => {
+  console.log('[Image Cache] Loading from manifest.json files');
   
   for (const dir of knownDirectories) {
     try {
@@ -42,29 +42,16 @@ const preloadFromManifests = async (): Promise<void> => {
       const basePath = subcategory ? `${category}/${subcategory}` : category;
       const manifestUrl = `${import.meta.env.BASE_URL || '/'}images/${basePath}/manifest.json`;
       
-      console.log(`[Image Cache] Checking manifest: ${manifestUrl}`);
+      console.log(`[Image Cache] Loading manifest: ${manifestUrl}`);
       
-      const response = await fetch(manifestUrl, {
-        method: 'GET',
-        headers: { 'Cache-Control': 'no-cache' }
-      });
+      const response = await fetch(manifestUrl);
       
       if (response.ok) {
         const data = await response.json();
         
         if (data.files && Array.isArray(data.files)) {
-          // Initialize cache entry for this directory
-          if (!imageCache[basePath]) {
-            imageCache[basePath] = [];
-          }
-          
-          // Add all files from manifest
-          data.files.forEach((file: string) => {
-            if (!imageCache[basePath].includes(file)) {
-              imageCache[basePath].push(file);
-            }
-          });
-          
+          // Store the file list directly
+          imageCache[basePath] = data.files;
           console.log(`[Image Cache] Loaded ${data.files.length} files from manifest for ${basePath}`);
         }
       }
@@ -138,7 +125,7 @@ export const preloadImageDirectories = async (): Promise<Record<string, string[]
   await discoverDirectories();
   
   // Then load manifests for all known directories
-  await preloadFromManifests();
+  await loadFromManifests();
   
   console.log(`[Image Cache] Total directories loaded: ${Object.keys(imageCache).length}`);
   console.log('[Image Cache] Preloaded directories:', Object.keys(imageCache));
