@@ -3,14 +3,24 @@ const imageCache: Record<string, string[]> = {};
 
 // Known categories and subcategories to preload
 const knownDirectories = [
+  // 3d-works subdirectories
   { category: '3d-works', subcategory: 'renders' },
-  { category: '3d-works', subcategory: 'animations' },
+  { category: '3d-works', subcategory: 'models' },
+  
+  // animations subdirectories
   { category: 'animations', subcategory: 'pixel-animations' },
-  { category: 'animations', subcategory: 'digital-animations' },
+  { category: 'animations', subcategory: '2d-animations' },
+  { category: 'animations', subcategory: '3d-animations' },
   { category: 'animations', subcategory: 'live2d' },
+  
+  // 2d-arts subdirectories
   { category: '2d-arts', subcategory: 'illustrations' },
   { category: '2d-arts', subcategory: 'sketches' },
   { category: '2d-arts', subcategory: 'traditional' },
+  { category: '2d-arts', subcategory: 'casual-arts' },
+  { category: '2d-arts', subcategory: 'character-concept-designs' },
+  
+  // other categories
   { category: 'pixel-arts', subcategory: null },
   { category: 'tattoos', subcategory: 'tattoos' },
   { category: 'tattoos', subcategory: 'fake-skin' },
@@ -34,7 +44,6 @@ export const getPublicImageUrl = (path: string): string => {
 
 // Load manifests for known directories - no validation needed for static files
 const loadFromManifests = async (): Promise<void> => {
-  console.log('[Image Cache] Loading from manifest.json files');
   
   for (const dir of knownDirectories) {
     try {
@@ -42,7 +51,6 @@ const loadFromManifests = async (): Promise<void> => {
       const basePath = subcategory ? `${category}/${subcategory}` : category;
       const manifestUrl = `${import.meta.env.BASE_URL || '/'}images/${basePath}/manifest.json`;
       
-      console.log(`[Image Cache] Loading manifest: ${manifestUrl}`);
       
       const response = await fetch(manifestUrl);
       
@@ -52,12 +60,30 @@ const loadFromManifests = async (): Promise<void> => {
         if (data.files && Array.isArray(data.files)) {
           // Store the file list directly
           imageCache[basePath] = data.files;
-          console.log(`[Image Cache] Loaded ${data.files.length} files from manifest for ${basePath}`);
+        } else {
+          console.warn(`[Image Cache] No files array found in manifest for ${basePath}`);
+          imageCache[basePath] = []; // Initialize with empty array to prevent future lookups
         }
+      } else {
+        console.warn(`[Image Cache] Failed to load manifest for ${basePath}: ${response.status} ${response.statusText}`);
+        imageCache[basePath] = []; // Initialize with empty array to prevent future lookups
       }
     } catch (error) {
       console.error(`[Image Cache] Error loading manifest for ${dir.category}/${dir.subcategory || ''}:`, error);
+      // Initialize with empty array to prevent future failed lookups
+      const basePath = dir.subcategory ? `${dir.category}/${dir.subcategory}` : dir.category;
+      imageCache[basePath] = [];
     }
+  }
+  
+  // Print debug info about loaded manifests
+  const loadedDirs = Object.keys(imageCache);
+  const emptyDirs = loadedDirs.filter(dir => imageCache[dir].length === 0);
+  const nonEmptyDirs = loadedDirs.filter(dir => imageCache[dir].length > 0);
+  
+  
+  if (emptyDirs.length > 0) {
+    console.warn('[Image Cache] Empty directories:', emptyDirs.join(', '));
   }
 };
 
@@ -112,6 +138,9 @@ const discoverDirectories = async (): Promise<void> => {
         }
       }
     }
+    
+    // Log the final list of directories for debugging
+      knownDirectories.map(dir => dir.subcategory ? `${dir.category}/${dir.subcategory}` : dir.category).join(', '));
   } catch (error) {
     console.error('[Image Cache] Error discovering directories:', error);
   }
@@ -119,7 +148,6 @@ const discoverDirectories = async (): Promise<void> => {
 
 // Preload all image directories
 export const preloadImageDirectories = async (): Promise<Record<string, string[]>> => {
-  console.log('[Image Cache] Starting preload of image directories...');
   
   // First discover any additional directories from root manifest
   await discoverDirectories();
@@ -127,9 +155,6 @@ export const preloadImageDirectories = async (): Promise<Record<string, string[]
   // Then load manifests for all known directories
   await loadFromManifests();
   
-  console.log(`[Image Cache] Total directories loaded: ${Object.keys(imageCache).length}`);
-  console.log('[Image Cache] Preloaded directories:', Object.keys(imageCache));
-  console.log('[Image Cache] Image counts per directory:', 
     Object.entries(imageCache).map(([dir, files]) => `${dir}: ${files.length}`).join(', '));
   
   return imageCache;

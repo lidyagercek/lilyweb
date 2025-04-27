@@ -60,7 +60,6 @@ const generateManifest = (dir) => {
   const manifestPath = path.join(dir, 'manifest.json');
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');
   
-  console.log(`✅ Generated manifest for ${path.relative(ROOT_DIR, dir)} with ${imageFiles.length} images`);
   
   // Process subdirectories recursively
   subdirectories.forEach(subdir => {
@@ -70,8 +69,6 @@ const generateManifest = (dir) => {
 
 // Main function
 const main = () => {
-  console.log('🔍 Generating image manifests...');
-  console.log(`🗂️  Root directory: ${ROOT_DIR}`);
   
   // Create the root manifest.json with information
   const rootManifest = {
@@ -84,7 +81,6 @@ const main = () => {
   };
   
   fs.writeFileSync(path.join(ROOT_DIR, 'manifest.json'), JSON.stringify(rootManifest, null, 2) + '\n');
-  console.log('✅ Generated root manifest.json');
   
   // Process all directories recursively
   const topLevelDirs = getDirectories(ROOT_DIR);
@@ -92,7 +88,6 @@ const main = () => {
     generateManifest(dir);
   });
   
-  console.log('✨ All manifests generated successfully!');
 };
 
 // Run the script

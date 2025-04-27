@@ -40,7 +40,10 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
         const foundImages = getImageList(category, subcategory);
         
         if (foundImages.length === 0) {
+          console.warn(`[Gallery] No images found for ${category}/${subcategory || ""} - check that manifest.json exists and is up to date`);
           setError(`No images found in ${category}/${subcategory || ""}`);
+        } else {
+          console.log(`[Gallery] Found ${foundImages.length} images for ${category}/${subcategory || ""}`);
         }
         
         setImages(foundImages);
