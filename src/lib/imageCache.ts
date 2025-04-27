@@ -84,7 +84,7 @@ export const preloadImageDirectories = async (): Promise<Record<string, string[]
   
   // Try each pattern
     try {
-      const imageModules = import.meta.glob('../../public/images/**/*.{jpg,jpeg,png,gif,webp,svg,bmp,ico}', { 
+      const imageModules = import.meta.glob('../../dist/images/**/*.{jpg,jpeg,png,gif,webp,svg,bmp,ico}', { 
         eager: true,
         as: 'url'
       });
