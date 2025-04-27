@@ -223,8 +223,6 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
         
         // Get images from the correct subcategory if specified
         const foundImages = await scanDirectoryForImages(category, subcategory);
-        
-        
         if (foundImages.length === 0) {
           setError(`No images found in ${category}/${subcategory || ""}`);
         }
