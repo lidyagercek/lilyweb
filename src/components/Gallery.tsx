@@ -28,70 +28,57 @@ const scanDirectoryForImages = async (directoryPath: string, subDir?: string): P
       basePath = `${directoryPath}/${subDir}`;
     }
     
-    console.log(`[Gallery Debug] Scanning directory: ${basePath}`);
     
     // Attempt 1: Try to use manifest.json if available
     try {
       const manifestUrl = `${import.meta.env.BASE_URL || '/'}images/${basePath}/manifest.json`;
-      console.log(`[Gallery Debug] Checking manifest: ${manifestUrl}`);
       
       const response = await fetch(manifestUrl, {
         method: 'GET',
         headers: { 'Cache-Control': 'no-cache' }
       });
       
-      console.log(`[Gallery Debug] Manifest fetch status: ${response.status}`);
       
       if (response.ok) {
         const data = await response.json();
-        console.log(`[Gallery Debug] Manifest data:`, data);
         
         if (data.files && Array.isArray(data.files)) {
-          console.log(`[Gallery Debug] Found ${data.files.length} images via manifest:`, data.files);
           
           // Verify each file exists and has content
           const verifiedFiles = [];
           for (const file of data.files) {
             const fileUrl = getPublicImageUrl(`${basePath}/${file}`);
-            console.log(`[Gallery Debug] Checking file: ${fileUrl}`);
             
             try {
               const fileCheck = await fetch(fileUrl, { method: 'HEAD' });
               if (fileCheck.ok && parseInt(fileCheck.headers.get('content-length') || '0') > 0) {
-                console.log(`[Gallery Debug] File verified: ${file}`);
                 verifiedFiles.push(file);
               } else {
-                console.log(`[Gallery Debug] File exists but may be empty or inaccessible: ${file}`);
               }
             } catch (e) {
-              console.log(`[Gallery Debug] Unable to verify file ${file}:`, e);
             }
           }
           
           if (verifiedFiles.length > 0) {
-            console.log(`[Gallery Debug] Returning ${verifiedFiles.length} verified files from manifest`);
             return verifiedFiles;
           } else {
-            console.log('[Gallery Debug] No valid files found in manifest');
           }
         }
       }
     } catch (e) {
-      console.log(`[Gallery Debug] Error checking manifest:`, e);
+      console.error(`[Gallery Debug] Error scanning directory ${directoryPath}/${subDir || ''}:`, err);
+
     }
     
     // Attempt 2: Try to directly scan the directory using more aggressive methods
-    console.log(`[Gallery Debug] Falling back to direct directory scan`);
     return await scanDirectoryDirectly(basePath);
   } catch (err) {
-    console.error(`[Gallery Debug] Error scanning directory ${directoryPath}/${subDir || ''}:`, err);
     return [];
   }
 };
 
 // Directly scan a directory for all possible image files
 const scanDirectoryDirectly = async (basePath: string): Promise<string[]> => {
-  console.log(`Directly scanning directory: ${basePath}`);
   const foundImages: string[] = [];
   
   // Common image extensions to check
@@ -110,7 +97,6 @@ const scanDirectoryDirectly = async (basePath: string): Promise<string[]> => {
       
       if (matches && matches.length > 0) {
         const imageFiles = matches.map(m => m[1].split('/').pop() || '').filter(Boolean);
-        console.log(`Found ${imageFiles.length} images via directory listing`);
         return imageFiles;
       }
     }
@@ -178,7 +164,6 @@ const scanDirectoryDirectly = async (basePath: string): Promise<string[]> => {
     }
   });
   
-  console.log(`Directly found ${foundImages.length} images in ${basePath}`);
   
   // If we still haven't found any images, try one last approach - looking for any image files
   if (foundImages.length === 0) {
@@ -235,12 +220,10 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
       setError(null);
       
       try {
-        console.log(`[Gallery Debug] Looking for images in category: ${category}, subcategory: ${subcategory || "none"}`);
         
         // Get images from the correct subcategory if specified
         const foundImages = await scanDirectoryForImages(category, subcategory);
         
-        console.log(`[Gallery Debug] Found ${foundImages.length} images for ${category}/${subcategory || ""}:`, foundImages);
         
         if (foundImages.length === 0) {
           setError(`No images found in ${category}/${subcategory || ""}`);
@@ -288,7 +271,6 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
               const imageUrl = getPublicImageUrl(imagePath);
               const displayName = formatImageName(image);
               
-              console.log(`Image #${index}: ${imageUrl}`);
               
               return (
                 <div 

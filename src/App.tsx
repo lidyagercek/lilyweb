@@ -62,12 +62,10 @@ export default function App() {
 
   // Function to handle closing a window
   const closeWindow = (windowId: string) => {
-    console.log("Closing window:", windowId);
     
     // Remove from active windows
     setActiveWindows(prev => {
       const filtered = prev.filter(id => id !== windowId);
-      console.log("New active windows:", filtered);
       return filtered;
     });
     

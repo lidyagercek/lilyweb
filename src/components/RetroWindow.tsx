@@ -235,18 +235,15 @@ export function RetroWindow({
 
   // Convert category name to folder name (lowercase, replace spaces with hyphens)
   const getFolderName = (cat: string) => {
-    console.log(`[RetroWindow Debug] getFolderName input: "${cat}"`);
     
     // Handle special case for "Character/Concept Designs"
     if (cat.toLowerCase() === "character/concept designs") {
-      console.log(`[RetroWindow Debug] Matched special case for character-concept-designs`);
       return "character-concept-designs";
     }
     
     // Handle multi-level subcategories with slashes
     if (cat.includes("/")) {
       const result = cat.toLowerCase().replace(/\//g, "-").replace(/\s+/g, "-");
-      console.log(`[RetroWindow Debug] Processed slash-containing name to: "${result}"`);
       return result;
     }
     
@@ -312,13 +309,11 @@ export function RetroWindow({
     
     // Check if we have a special case mapping
     if (specialCases[cat]) {
-      console.log(`[RetroWindow Debug] Matched special case: "${cat}" -> "${specialCases[cat]}"`);
       return specialCases[cat];
     }
     
     // Default: convert to lowercase and replace spaces with hyphens
     const result = cat.toLowerCase().replace(/\s+/g, '-');
-    console.log(`[RetroWindow Debug] Default processing: "${cat}" -> "${result}"`);
     return result;
   };
   

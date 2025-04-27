@@ -321,8 +321,6 @@ export function AboutContent({ subcategory }: AboutContentProps) {
                 const subject = formData.get('subject') as string;
                 const message = formData.get('message') as string;
                 
-                // In a real app, you would send this data to your server or email service
-                console.log('Form submitted:', { name, email, subject, message });
                 
                 // For demonstration purposes, show an alert
                 alert(`Thank you, ${name}! Your message has been sent.`);
