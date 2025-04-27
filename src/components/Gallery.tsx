@@ -69,7 +69,7 @@ export function Gallery({ category, subcategory, onSelectItem }: GalleryProps) {
         </div>
       ) : images.length === 0 ? (
         <div className="w-full h-full flex items-center justify-center bg-[#000000]" style={{ backgroundImage: 'none' }}>
-          <div className="bg-[#000000] border-4 border-[#6D6DD0] p-6 w-64 h-32 flex items-center justify-center">
+          <div className="bg-[#000000] p-6 w-64 h-32 flex items-center justify-center">
             <p className="text-center text-xl text-[#6D6DD0] font-bold">
               This folder is empty
             </p>
