@@ -107,7 +107,11 @@ export function AboutContent({ subcategory }: AboutContentProps) {
             </div>
             
             <p className="text-center max-w-md">
-  My career in the game industry started when I was 17. My first job experience was at a mobile FPS game studio, where I got to learn more about the jobs in the game industry.  
+            In the future, I'd like to work with a company that creates mostly PC games with Far Eastern aesthetics, possibly with cute and lively assets. I love games with cute and stunning graphics that make you feel like you're seeing a visual feast. Or games with amazingly made storylines that captivate people. After all, games are a way to escape from reality, just for a moment. I believe you can bring light to people's lives through games.
+            <br /><br />
+            ------------------------------------
+            <br /><br />
+            My career in the game industry started when I was 17. My first job experience was at a mobile FPS game studio, where I got to learn more about the jobs in the game industry.  
   <br /><br />
   I designed UIs and placed them in Unity, created social media posts, reskinned UIs and social media accounts for specific events, worked on illustrations using Photoshop, bug tested our game before the QA team, managed the reviews of our game while taking notes of bugs and issues with a priority list, and even acted as a support agent for some players.
   <br /><br />
@@ -271,9 +275,8 @@ export function AboutContent({ subcategory }: AboutContentProps) {
               {[
                 { name: "YouTube (i)", link: "https://www.youtube.com/@Lillulette/", icon: "YouTube_Inactive.png" },
                 { name: "X / Twitter (i)", link: "https://x.com/lillulette/", icon: "X_Twitter_Inactive.png" },
-                { name: "Itch.io", link: "https://lillulette.itch.io/", icon: "Itch_Io.png" },
-                { name: "Art Instagram (i)", link: "https://instagram.com/lillulette/", icon: "Instagram_Inactive.png" },
-                { name: "Tattoo Instagram", link: "https://instagram.com/lillulettoo/", icon: "Instagram_Active.png" }
+                { name: "Itch.io", link: "https://lillulette.itch.io/", icon: "Itch_Io.png" }
+      
               ].map((social, index) => (
                 <a 
                   key={index} 
